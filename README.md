@@ -18,7 +18,86 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+bash
+~~~
+rails g controller sessions
+rails g model user provider:string uid:string name:string
+rake db:migrate
+touch app/views/sessions/hello.html.erb
+~~~
+
+gemfile
+~~~
+gem 'omniauth'
+gem 'omniauth-oauth2'
+gem 'omniauth-dailycred'
+~~~
+
+config/initializers/omniauth.rb
+~~~
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider 'dailycred', 'd3637864-38b3-4ffd-a989-37722907d816', '1e2a49a4-ff88-413b-b1dd-8cff62725f00-36183932-ad11-4825-8596-7e634d679cbd'
+end
+~~~
+
+routes.rb (make sure you delete the file /public/index.html)
+~~~
+match "/auth/:provider/callback" => "sessions#create"
+match "/signout" => "sessions#destroy", :as => :signout
+root :to => "sessions#hello"
+~~~
+
+sessions_controller.rb
+~~~
+def create
+  auth = request.env["omniauth.auth"]
+  user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
+  session[:user_id] = user.id
+  redirect_to root_url, :notice => "Signed in!"
+end
+
+def destroy
+  session[:user_id] = nil
+  redirect_to root_url, :notice => "Signed out!"
+end
+
+def hello
+  
+end
+~~~
+
+models/user.rb
+~~~
+def self.create_with_omniauth(auth)
+  create! do |user|
+    user.provider = auth["provider"]
+    user.uid = auth["uid"]
+    user.name = auth["info"]["name"]
+  end
+end
+~~~
+
+application_controller.rb
+~~~
+helper_method :current_user
+
+private
+
+def current_user
+  @current_user ||= User.find(session[:user_id]) if session[:user_id]
+end
+~~~
+
+app/views/sessions/hello.html.erb
+~~~
+<% if current_user %>
+  Welcome <%= current_user.email %>!
+  <%= link_to "Sign Out", signout_path %>
+<% else %>
+  <%= link_to "Sign in", "/auth/dailycred" %>
+<% end %>
+~~~
+
 
 ## Contributing
 

@@ -5,7 +5,6 @@ require 'json'
 module OmniAuth
   module Strategies
     class Dailycred < OmniAuth::Strategies::OAuth2
-      
       option :client_options, {
         :site => 'http://localhost:9000',
         :authorize_url => '/oauth/authorize',
@@ -15,13 +14,10 @@ module OmniAuth
       uid { user['id'] }
       
       info do
-        temp_user = user
-        puts temp_user
-        puts "======"
         {
-          'email'   => temp_user['emai'],
-          'username'=> temp_user['username'],
-          'created' => temp_user['created']
+          'email'   => user['email'],
+          'username'=> user['username'],
+          'created' => user['created']
         }
       end
       
@@ -41,7 +37,7 @@ module OmniAuth
         duser['username']= json['username']
         duser['created'] = json['created']
         
-        @user ||= duser
+        duser
       end
         
     end

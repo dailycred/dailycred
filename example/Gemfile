@@ -2,7 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
 gem 'omniauth'
-gem 'omniauth-dailycred', :git => 'https://github.com/hstove/omniauth-dailycred.git'
+gem 'omniauth-oauth2'
+gem 'omniauth-dailycred', :path => '../'
+gem 'faraday'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
