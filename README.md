@@ -21,9 +21,11 @@ Or install it yourself as:
 bash
 ~~~
 rails g controller sessions
-rails g model user provider:string uid:string name:string
+rails g model user provider:string uid:string email:string
 rake db:migrate
 touch app/views/sessions/hello.html.erb
+touch config/initializers/omniauth.rb
+rm public/index.html
 ~~~
 
 gemfile
@@ -36,7 +38,7 @@ gem 'omniauth-dailycred'
 config/initializers/omniauth.rb
 ~~~
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider 'dailycred', 'd3637864-38b3-4ffd-a989-37722907d816', '1e2a49a4-ff88-413b-b1dd-8cff62725f00-36183932-ad11-4825-8596-7e634d679cbd'
+  provider 'dailycred', YOUR_APP_KEY, YOUR_SECRET_KEY
 end
 ~~~
 
