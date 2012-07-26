@@ -1,3 +1,4 @@
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider 'dailycred', 'd3637864-38b3-4ffd-a989-37722907d816', '1e2a49a4-ff88-413b-b1dd-8cff62725f00-36183932-ad11-4825-8596-7e634d679cbd'
+  provider 'dailycred', '9dbbaebe-bb11-44ef-bbdd-5e58645fab30', 'd987fc65-1097-43b6-9342-5e6efbbe558a-3428de34-a734-428b-9a19-d6af6c9eab50', {:client_options => {:ssl => {:ca_path => "/opt/local/etc/openssl/certs"}}}
 end

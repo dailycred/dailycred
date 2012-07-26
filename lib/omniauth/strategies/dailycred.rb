@@ -6,7 +6,7 @@ module OmniAuth
   module Strategies
     class Dailycred < OmniAuth::Strategies::OAuth2
       option :client_options, {
-        :site => 'http://localhost:9000',
+        :site => 'https://www.dailycred.com',
         :authorize_url => '/oauth/authorize',
         :token_url => '/oauth/api/token.json'
       }
@@ -23,7 +23,7 @@ module OmniAuth
       
       private
       def user
-        conn = Faraday.new(:url => 'http://localhost:9000') do |faraday|
+        conn = Faraday.new(:url => 'https://www.dailycred.com') do |faraday|
           faraday.request  :url_encoded             # form-encode POST params
           faraday.response :logger                  # log requests to STDOUT
           faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP

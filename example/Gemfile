@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.1.1'
 gem 'omniauth'
 gem 'omniauth-oauth2'
-gem 'omniauth-dailycred', :path => '../'
+gem 'omniauth-dailycred'
 gem 'faraday'
 
 # Bundle edge Rails instead:
