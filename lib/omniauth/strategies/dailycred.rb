@@ -1,5 +1,6 @@
 require 'omniauth-oauth2'
 require 'faraday'
+require 'net/https'
 require 'json'
 
 module OmniAuth
@@ -8,7 +9,7 @@ module OmniAuth
       option :client_options, {
         :site => 'https://www.dailycred.com',
         :authorize_url => '/oauth/authorize',
-        :token_url => '/oauth/api/token.json'
+        :token_url => '/oauth/access_token'
       }
       
       uid { user['id'] }
@@ -23,13 +24,12 @@ module OmniAuth
       
       private
       def user
-        conn = Faraday.new(:url => 'https://www.dailycred.com') do |faraday|
-          faraday.request  :url_encoded             # form-encode POST params
-          faraday.response :logger                  # log requests to STDOUT
-          faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        end
-        
-        response = conn.post '/oauth/api/me.json', {:access_token => access_token.token}
+        connection = Faraday::Connection.new 'https://www.dailycred.com', :ssl => {
+          :ca_file => "/opt/local/share/curl/curl-ca-bundle.crt"
+        }
+        response = connection.get("/graph/me.json?access_token=#{access_token.token}")
+        p response.body
+        p JSON.parse(response.body)
         json = JSON.parse(response.body)
         duser = {}
         duser['email']   = json['email']
