@@ -103,11 +103,7 @@ You may get an error such as the following:
 
     Faraday::Error::ConnectionFailed (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed):
 
-If that is the case, consider following fixes explained [here](https://github.com/technoweenie/faraday/wiki/Setting-up-SSL-certificates). If that doesn't work, consider adding the following line: 
-
-    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-
-to the top of config/initializers/omniauth.rb
+If that is the case, consider following fixes explained [here](https://github.com/technoweenie/faraday/wiki/Setting-up-SSL-certificates) or [here](http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error/_).
 
 ## Contributing
 
