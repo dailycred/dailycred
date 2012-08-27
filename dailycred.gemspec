@@ -7,6 +7,8 @@ Gem::Specification.new do |gem|
   gem.description   = %q{descript}
   gem.summary       = %q{summary}
   gem.homepage      = "https://www.dailycred.com"
+  gem.add_dependency("omniauth")
+  gem.add_dependency("omniauth-oauth2")
 
   gem.files         = `git ls-files`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

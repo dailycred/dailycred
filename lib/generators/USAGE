@@ -1,0 +1,16 @@
+Description:
+  Generates a user model and sessions controller for authentication with omniauth and dailycred. Also includes migration file and initializer.
+
+Usage:
+  This generator takes two arguments: client_id and secret_key. If you do not specify your Dailycred API keys they will default to "YOUR_CLIENT_ID" and "YOUR_SECRET_KEY", respectively. You can later specify them at /config/initializers/omniauth.rb
+
+Examples:
+  
+  rails g dailycred
+
+    creates all files without your client_id and secret_key pre-inserted.
+
+  rails g dailycred client-id-here secret-key-here
+
+    creates all files with client_id "client-id-here" and secret_key "secret-key-here"
+

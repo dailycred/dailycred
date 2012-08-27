@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example3</title>
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>  
+  <% if current_user %>
+    Welcome <%= current_user.name %>!
+    <%= link_to "Sign Out", signout_path %>
+  <% else %>
+    <%= link_to "Sign in", "/auth/dailycred" %>
+  <% end %>
+
+
+<%= yield %>
+
+</body>
+</html>

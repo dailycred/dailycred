@@ -1,17 +1,29 @@
 require "omniauth-dailycred/version"
 require "omniauth/strategies/dailycred"
+require "middleware"
 
-# module MyHelper
-#   def dailycred_sign_in_form options = {}
-#     if !options.email && !options.username
-#       options['email'] = true
-#     content = "<form action='https://www.dailycred.com/oauth/api/signin.json' method='post'>"
-#     if options.email
-#       content += "<input name='login' type='text'>"
-#     content += "<input name='pass' type='password'>"
-#     content += "<input type='submit' value='Sign in'>"
-#   end
-# end
+class Dailycred
+
+  attr_accessor :client_id, :secret_key
+
+  def initialize(client_id, secret_key="")
+    @client_id = client_id
+    @secret_key = secret_key
+  end
+
+  def event(user_id, key, val="")
+    connection = Faraday::Connection.new 'https://www.dailycred.com', :ssl => { :ca_file => "/opt/local/share/curl/curl-ca-bundle.crt" }
+    opts = {
+      :client_id => client_id,
+      :client_secret => secret_key,
+      :key => key,
+      :valuestring => val,
+      :user_id => user_id
+    }
+    connection.post "/admin/api/customevent.json", opts
+  end
+
+end
 
 module Omniauth
   module Dailycred
