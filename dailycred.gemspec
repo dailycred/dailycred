@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{summary}
   gem.homepage      = "https://www.dailycred.com"
 
-  gem.files         = `git ls-files`.split($\)
+  gem.files         = `git ls-files`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dailycred"
