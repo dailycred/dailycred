@@ -28,8 +28,6 @@ module OmniAuth
           :ca_file => "/opt/local/share/curl/curl-ca-bundle.crt"
         }
         response = connection.get("/graph/me.json?access_token=#{access_token.token}")
-        p response.body
-        p JSON.parse(response.body)
         json = JSON.parse(response.body)
         duser = {}
         duser['email']   = json['email']
