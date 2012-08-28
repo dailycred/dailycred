@@ -1,10 +1,8 @@
-# Omniauth::Dailycred
+# Dailycred
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'omniauth-dailycred'
+Add this line to your application's Gemfile: 
 
 And then execute:
 
@@ -17,85 +15,45 @@ Or install it yourself as:
 ## Usage
 
 bash
-
-    rails g controller sessions
-    rails g model user provider:string uid:string email:string
+    
+    rails g dailycred YOUR_CLIENT_ID YOUR_SECRET_KEY
     rake db:migrate
-    touch app/views/sessions/hello.html.erb
-    touch config/initializers/omniauth.rb
-    rm public/index.html
 
+This will generate everything you need to get going with authentication, including a user model, session controller, omniauth initializer, javascript tracking code, and many helper variables. You will You can locate your API keys at [dailycred](https://www.dailycred.com/admin/settings/keys)
 
-gemfile
-  
-    gem 'omniauth'
-    gem 'omniauth-oauth2'
-    gem 'omniauth-dailycred'
+##### Authentication
 
-config/initializers/omniauth.rb
+Use the `:authenticate` helper to require a user to be signed in:
 
-    Rails.application.config.middleware.use OmniAuth::Builder do
-      provider 'dailycred', YOUR_APP_KEY, YOUR_SECRET_KEY
-    end
+    before_filter :authenticate
 
+The current user object can be located with `current_user`:
 
-routes.rb (make sure you delete the file /public/index.html)
+    # in posts_controller
 
-    match "/auth/:provider/callback" => "sessions#create"
-    match "/signout" => "sessions#destroy", :as => :signout
-    root :to => "sessions#hello"
+    @posts = currrent_user.posts.all
 
+##### Using only with Omniauth
 
-sessions_controller.rb
+If you already have omniauth set up and only want to use Dailycred as another OAuth provider, just add this line to your omniauth initializer file
+
+    provider :dailycred, 'CLIENT_ID', 'SECRET_KEY'
+
+##### Events
+
+To fire an event to be logged in Dailycred:
+
+    #in your controller
+
+    before_filter :dailycred
 
     def create
-      auth = request.env["omniauth.auth"]
-      user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
-      session[:user_id] = user.id
-      redirect_to root_url, :notice => "Signed in!"
+      ...
+
+      # after successfully saving the model:
+      @dailycred.event(current_user.uid, 'Created Post', @post.name)
+
     end
-
-    def destroy
-      session[:user_id] = nil
-      redirect_to root_url, :notice => "Signed out!"
-    end
-
-    def hello
-      
-    end
-
-
-models/user.rb
-
-    def self.create_with_omniauth(auth)
-      create! do |user|
-        user.provider = auth["provider"]
-        user.uid = auth["uid"]
-        user.name = auth["info"]["name"]
-      end
-    end
-
-
-application_controller.rb
-
-    helper_method :current_user
-
-    private
-
-    def current_user
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    end
-
-
-app/views/sessions/hello.html.erb
-
-    <% if current_user %>
-      Welcome <%= current_user.email %>!
-      <%= link_to "Sign Out", signout_path %>
-    <% else %>
-      <%= link_to "Sign in", "/auth/dailycred" %>
-    <% end %>
-
 
 ## SSL Error
 
@@ -103,7 +61,7 @@ You may get an error such as the following:
 
     Faraday::Error::ConnectionFailed (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed):
 
-If that is the case, consider following fixes explained [here](https://github.com/technoweenie/faraday/wiki/Setting-up-SSL-certificates) or [here](http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error/_).
+If that is the case, consider following fixes explained [here](https://github.com/technoweenie/faraday/wiki/Setting-up-SSL-certificates) or [here](http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error).
 
 ## Contributing
 

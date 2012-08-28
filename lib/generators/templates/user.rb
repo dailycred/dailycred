@@ -1,8 +1,14 @@
 class User < ActiveRecord::Base
-  serialize :tags
-  serialize :referred
 
   def self.create_with_omniauth(model)
+    if model[:provider] == "dailycred"
+      create_with_dailycred model
+    end
+  end
+
+  private
+
+  def self.create_with_dailycred(model)
     info = model[:info]
     create! do |user|
       user.provider = model[:provider]

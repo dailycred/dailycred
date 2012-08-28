@@ -26,32 +26,36 @@ class DailycredGenerator < Rails::Generators::Base
   end
 
   def authenticate
-    redirect_to :root unless current_user
+    redirect_to auth_path unless current_user
   end
 
-  def login_path
+  def signup_path
     "/auth/dailycred"
+  end
+
+  def signin_path
+    "/auth/dailycred?action=signup"
   end
 
   def dailycred
     config = Rails.configuration
-    @dailycred ||= Dailycred.new(config.dailycred_client_id, config.dailycred_secret_key)
+    @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY)
   end
   EOS
 
   def install
     dailycred_ascii =<<-EOS
-    //*****
-    //*****
-    //*****
-    //*****
-    //*****
-    //*****    Thanks for using dailycred!
-    //*****
-    //*****
-    //*****
-    //*****
-    //*****
+    *****
+    *****
+    *****
+    *****
+    *****
+    *****    Thanks for using dailycred!
+    *****
+    *****
+    *****
+    *****
+    *****
     EOS
     print dailycred_ascii
     # copy initializer

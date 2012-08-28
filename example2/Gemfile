@@ -1,6 +1,0 @@
-source :rubygems
-
-gem 'sinatra'
-gem 'omniauth'
-gem 'omniauth-oauth2'
-gem 'omniauth-dailycred', :path => '../'

@@ -1,20 +1,28 @@
 class Dailycred
-  class MiddleWare
+  class Middleware
+    attr_accessor :client_id
+
     def initialize(app, client_id)
       @app = app 
-      @token = client_id
+      @client_id = client_id
     end
 
     def call(env)
       @env = env
       @status, @headers, @response = @app.call(env)
-      #if good status, html response, and non-ajax request
-      if @status == 302 && (@headers["Content-Type"].include?("text/html") if @headers.has_key?("Content-Type")) && !(@env.has_key?("HTTP_X_REQUESTED_WITH") && @env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest")
-        @response.each do |part|
-          insert_at = part.index '</body'
-          part.insert insert_at, render_dailycred_scripts
+
+      if @headers["Content-Type"] =~ /text\/html|application\/xhtml\+xml/
+        body = ""
+        @response.each { |part| body << part }
+        index = body.rindex("</body>")
+        if index
+          body.insert(index, render_dailycred_scripts)
+          @headers["Content-Length"] = body.length.to_s
+          @response = [body]
         end
       end
+
+      [@status, @headers, @response]
     end
 
     private
@@ -26,7 +34,7 @@ class Dailycred
       (function() {
         var dc, dlh, home, id, page, referrer, title, url;
         window.dc_opts = {
-          clientId: "#{token}",s
+          clientId: "#{@client_id}",
           home: "https://www.dailycred.com"
         };
         id = dc_opts.clientId;
