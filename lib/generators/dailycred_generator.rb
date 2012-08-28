@@ -13,7 +13,7 @@ class DailycredGenerator < Rails::Generators::Base
   EOS
 
   APP_CONTROLLER_LINES =<<-EOS
-  helper_method :current_user, :login_path, :dailycred
+  helper_method :current_user, :login_path, :dailycred, :signup_path
 
   private
 
@@ -33,8 +33,8 @@ class DailycredGenerator < Rails::Generators::Base
     "/auth/dailycred"
   end
 
-  def signin_path
-    "/auth/dailycred?action=signup"
+  def login_path
+    "/auth/dailycred?action=signin"
   end
 
   def dailycred
