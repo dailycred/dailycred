@@ -56,25 +56,31 @@ class Dailycred
 
   def post(url, opts)
     opts.merge! base_opts
-    get_conn.post url, opts
+    p opts
+    response = get_conn.post url, opts
+    p response.body
   end
 
   def ssl_opts
     opts = {}
+    p @options
+    p " ^^^^ @options "
     if @options[:client_options] && @options[:client_options][:ssl]
       opts[:ssl] = @options[:client_options][:ssl]
     end
+    p opts
     opts
   end
 
   def base_opts
     {
       :client_id => @client_id,
-      :client_secret => @client_secret
+      :client_secret => @secret_key
     }
   end
 
   def get_conn
+    p ssl_opts
     Faraday::Connection.new Dailycred::URL, ssl_opts
   end
 end

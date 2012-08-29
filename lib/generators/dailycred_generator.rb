@@ -39,7 +39,7 @@ class DailycredGenerator < Rails::Generators::Base
 
   def dailycred
     config = Rails.configuration
-    @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY)
+    @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.dc_client_opts)
   end
   EOS
 

@@ -29,6 +29,13 @@ module OmniAuth
       
       alias :old_request_phase :request_phase
 
+
+      def authorize_params
+        super.tap do |params|
+          params[:state] ||= {}
+        end
+      end
+
       def request_phase 
         OmniAuth::Strategies::Dailycred::AUTH_PARAMS.each do |param|
           val = session['omniauth.params'][param]
