@@ -31,7 +31,7 @@ The current user object can be located with `current_user`:
 
     # in posts_controller
 
-    @posts = currrent_user.posts.all
+    @posts = current_user.posts.all
 
 ##### Using only with Omniauth
 
