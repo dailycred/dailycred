@@ -19,7 +19,7 @@ bash
     rails g dailycred YOUR_CLIENT_ID YOUR_SECRET_KEY
     rake db:migrate
 
-This will generate everything you need to get going with authentication, including a user model, session controller, omniauth initializer, javascript tracking code, and many helper variables. You will You can locate your API keys at [dailycred](https://www.dailycred.com/admin/settings/keys)
+This will generate everything you need to get going with authentication, including a user model, session controller, omniauth initializer, javascript tracking code, and many helper variables. You can locate your API keys at [dailycred](https://www.dailycred.com/admin/settings/keys).
 
 ##### Authentication
 
@@ -31,7 +31,7 @@ The current user object can be located with `current_user`:
 
     # in posts_controller
 
-    @posts = currrent_user.posts.all
+    @posts = current_user.posts.all
 
 ##### Using only with Omniauth
 
