@@ -1,10 +1,18 @@
 require "omniauth-dailycred/version"
 require "omniauth/strategies/dailycred"
 require "middleware/middleware"
+require "user/user"
 
 class Dailycred
 
-  attr_accessor :client_id, :secret_key, :options
+  attr_accessor :client_id, :secret_key, :options, :url
+
+  URL = "https://www.dailycred.com"
+
+  ROUTES = {
+    :signup => "/user/api/signup.json",
+    :login  => "/user/api/signin.json"
+  }
 
   # Initializes a dailycred object
   # @param [String] client_id the client's daiycred client id
@@ -14,9 +22,8 @@ class Dailycred
     @client_id = client_id
     @secret_key = secret_key
     @options = opts
+    @url = opts[:url] || Dailycred::URL
   end
-
-  URL = "https://www.dailycred.com"
 
   # Generates a Dailycred event
   # @param [String] user_id the user's dailycred user id
@@ -52,23 +59,30 @@ class Dailycred
     post "/admin/api/user/untag.json", opts
   end
 
+  #Login attempt
+  def login user
+    response = post Dailycred::ROUTES[:login], user
+    response.body
+  end
+
+  def signin user
+    resposne = post Dailycred::ROUTES[:signup], user
+    response.body
+  end
+
   private
 
   def post(url, opts)
     opts.merge! base_opts
     p opts
     response = get_conn.post url, opts
-    p response.body
   end
 
   def ssl_opts
     opts = {}
-    p @options
-    p " ^^^^ @options "
     if @options[:client_options] && @options[:client_options][:ssl]
       opts[:ssl] = @options[:client_options][:ssl]
     end
-    p opts
     opts
   end
 
@@ -80,7 +94,6 @@ class Dailycred
   end
 
   def get_conn
-    p ssl_opts
-    Faraday::Connection.new Dailycred::URL, ssl_opts
+    Faraday::Connection.new @url, ssl_opts
   end
 end

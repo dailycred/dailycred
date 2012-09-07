@@ -1,25 +1,14 @@
 class User < ActiveRecord::Base
+  serialize :facebook, Hash
+  serialize :tags, Array
+  serialize :referred, Array
 
-  def self.create_with_omniauth(model)
-    if model[:provider] == "dailycred"
-      create_with_dailycred model
-    end
-  end
+  attr_accessible :email, :id, :username, :created, :verified, :admin, :referred_by, :referred, :facebook, :tags, :provider, :uid, :token
 
-  private
-
-  def self.create_with_dailycred(model)
-    info = model[:info]
-    create! do |user|
-      user.provider = model[:provider]
-      user.uid = model[:uid]
-      user.email =info[:email]
-      user.username = info[:username]
-      user.created = info[:created]
-      user.verified = info[:verified]
-      user.admin = info[:admin]
-      user.referred_by = info[:referred_by]
-    end
+  def self.find_or_create_with_omniauth(model)
+    @user = User.find_by_provider_and_uid(model[:provider], model[:uid]) || User.new
+    @user.update_attributes model[:info]
+    @user
   end
 
 end
