@@ -1,5 +1,5 @@
-Rails.configuration.DAILYCRED_CLIENT_ID = "ecafb79f-a198-4dbd-82d4-f921d49c6721"
-Rails.configuration.DAILYCRED_SECRET_KEY = "50a3ff88-409c-47e8-8afa-9ba5f52f7c15-d870ef5a-67d6-4c7e-8468-b77b2f08447a"
+Rails.configuration.DAILYCRED_CLIENT_ID = "a9dbdd59-585b-4f60-81b9-e1ee6d333ec9"
+Rails.configuration.DAILYCRED_SECRET_KEY = "08d7800d-2d7c-4338-87de-4eed77d1c9b2-9f367fe8-4e39-4edc-a8c7-1e759f657185"
 
 dc_id = Rails.configuration.DAILYCRED_CLIENT_ID
 dc_secret = Rails.configuration.DAILYCRED_SECRET_KEY

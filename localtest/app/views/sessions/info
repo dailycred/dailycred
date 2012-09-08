@@ -2,9 +2,8 @@
   <p>Hello <%= current_user.email %> <br>
     <%= link_to 'Logout', logout_path %>
     <%= link_to 'Sign Up', signup_path %>
+    <%= current_user.inspect %>
   </p>
 <% else %>
   <%= link_to 'Log In', login_path %> or <%= link_to 'Sign Up', signup_path %>
 <% end %>
-
-{"id":"216ed228-31f5-418d-90c9-f7fc6c8f5f1c","created":"1346971917189","verified":"false","FACEBOOK":{"members":{"id":"1092690812","name":"Hank Stoever","first_name":"Hank","last_name":"Stoever","link":"http://www.facebook.com/hank.stoever","username":"hank.stoever","hometown":{"id":"103118733061122","name":"Bethesda, Maryland"},"location":{"id":"110843418940484","name":"Seattle, Washington"},"gender":"male","timezone":-7,"locale":"en_US","verified":true,"updated_time":"2012-06-28T19:45:49+0000"}},"guest":"false"}

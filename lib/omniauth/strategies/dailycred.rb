@@ -57,7 +57,7 @@ module OmniAuth
         pp json
         @duser = {'token' => access_token.token}
         @duser['provider'] = 'dailycred'
-        @duser['uid'] = json['id']
+        @duser['uid'] =  json['id'] || json['user_id']
         OmniAuth::Strategies::Dailycred::ATTRIBUTES.each do |attr|
           @duser[attr] = json[attr]
         end

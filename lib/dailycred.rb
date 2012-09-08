@@ -1,7 +1,6 @@
 require "omniauth-dailycred/version"
 require "omniauth/strategies/dailycred"
 require "middleware/middleware"
-require "user/user"
 
 class Dailycred
 
@@ -22,7 +21,8 @@ class Dailycred
     @client_id = client_id
     @secret_key = secret_key
     @options = opts
-    @url = opts[:url] || Dailycred::URL
+    opts[:client_options] ||= {}
+    @url = opts[:client_options][:site] || Dailycred::URL
   end
 
   # Generates a Dailycred event
@@ -49,7 +49,7 @@ class Dailycred
     post "/admin/api/user/tag.json", opts
   end
 
-  # Untag a user in dailycred 
+  # Untag a user in dailycred
   # (see #tag)
   def untag(user_id, tag)
     opts = {
@@ -59,24 +59,12 @@ class Dailycred
     post "/admin/api/user/untag.json", opts
   end
 
-  #Login attempt
-  def login user
-    response = post Dailycred::ROUTES[:login], user
-    response.body
-  end
-
-  def signin user
-    resposne = post Dailycred::ROUTES[:signup], user
-    response.body
+  def post(url, opts)
+    opts.merge! base_opts
+    response = get_conn.post url, opts
   end
 
   private
-
-  def post(url, opts)
-    opts.merge! base_opts
-    p opts
-    response = get_conn.post url, opts
-  end
 
   def ssl_opts
     opts = {}
