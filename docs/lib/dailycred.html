@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>dailycred.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="dailycred.html">dailycred.rb</a>
+          <a class="source" href="generators/dailycred_generator.html">dailycred_generator.rb</a>
+          <a class="source" href="generators/templates/migration_create_user.html">migration_create_user.rb</a>
+          <a class="source" href="generators/templates/omniauth.html">omniauth.rb</a>
+          <a class="source" href="generators/templates/sessions_controller.html">sessions_controller.rb</a>
+          <a class="source" href="generators/templates/user.html">user.rb</a>
+          <a class="source" href="middleware/middleware.html">middleware.rb</a>
+          <a class="source" href="omniauth-dailycred/version.html">version.rb</a>
+          <a class="source" href="omniauth/strategies/dailycred.html">dailycred.rb</a>
+          <a class="source" href="user/user.html">user.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>dailycred.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s2">&quot;omniauth-dailycred/version&quot;</span>
+<span class="nb">require</span> <span class="s2">&quot;omniauth/strategies/dailycred&quot;</span>
+<span class="nb">require</span> <span class="s2">&quot;middleware/middleware&quot;</span>
+
+<span class="k">class</span> <span class="nc">Dailycred</span>
+
+  <span class="kp">attr_accessor</span> <span class="ss">:client_id</span><span class="p">,</span> <span class="ss">:secret_key</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:url</span>
+
+  <span class="no">URL</span> <span class="o">=</span> <span class="s2">&quot;https://www.dailycred.com&quot;</span>
+
+  <span class="no">ROUTES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="ss">:signup</span> <span class="o">=&gt;</span> <span class="s2">&quot;/user/api/signup.json&quot;</span><span class="p">,</span>
+    <span class="ss">:login</span>  <span class="o">=&gt;</span> <span class="s2">&quot;/user/api/signin.json&quot;</span>
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Initializes a dailycred object</p>
+
+<ul>
+<li>@param [String] client_id the client&rsquo;s daiycred client id</li>
+<li>@param [String] secret_key the clients secret key</li>
+<li>@param [Hash] opts a hash of options</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">secret_key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{})</span>
+    <span class="vi">@client_id</span> <span class="o">=</span> <span class="n">client_id</span>
+    <span class="vi">@secret_key</span> <span class="o">=</span> <span class="n">secret_key</span>
+    <span class="vi">@options</span> <span class="o">=</span> <span class="n">opts</span>
+    <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
+    <span class="vi">@url</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:site</span><span class="o">]</span> <span class="o">||</span> <span class="no">Dailycred</span><span class="o">::</span><span class="no">URL</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Generates a Dailycred event</p>
+
+<ul>
+<li>@param [String] user_id the user&rsquo;s dailycred user id</li>
+<li>@param [String] key the name of the event type</li>
+<li>@param [String] val the value of the event (optional)</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:key</span> <span class="o">=&gt;</span> <span class="n">key</span><span class="p">,</span>
+      <span class="ss">:valuestring</span> <span class="o">=&gt;</span> <span class="n">val</span><span class="p">,</span>
+      <span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">user_id</span>
+    <span class="p">}</span>
+    <span class="n">post</span> <span class="s2">&quot;/admin/api/customevent.json&quot;</span><span class="p">,</span> <span class="n">opts</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Tag a user in dailycred</p>
+
+<ul>
+<li>@param [String] user_id the user&rsquo;s dailycred user id</li>
+<li>@param [String] tag the desired tag to add</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">user_id</span><span class="p">,</span>
+      <span class="ss">:tag</span> <span class="o">=&gt;</span> <span class="n">tag</span>
+    <span class="p">}</span>
+    <span class="n">post</span> <span class="s2">&quot;/admin/api/user/tag.json&quot;</span><span class="p">,</span> <span class="n">opts</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Untag a user in dailycred
+(see #tag)</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">untag</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">user_id</span><span class="p">,</span>
+      <span class="ss">:tag</span> <span class="o">=&gt;</span> <span class="n">tag</span>
+    <span class="p">}</span>
+    <span class="n">post</span> <span class="s2">&quot;/admin/api/user/untag.json&quot;</span><span class="p">,</span> <span class="n">opts</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">merge!</span> <span class="n">base_opts</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">get_conn</span><span class="o">.</span><span class="n">post</span> <span class="n">url</span><span class="p">,</span> <span class="n">opts</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">ssl_opts</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:ssl</span><span class="o">]</span>
+      <span class="n">opts</span><span class="o">[</span><span class="ss">:ssl</span><span class="o">]</span> <span class="o">=</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:ssl</span><span class="o">]</span>
+    <span class="k">end</span>
+    <span class="n">opts</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">base_opts</span>
+    <span class="p">{</span>
+      <span class="ss">:client_id</span> <span class="o">=&gt;</span> <span class="vi">@client_id</span><span class="p">,</span>
+      <span class="ss">:client_secret</span> <span class="o">=&gt;</span> <span class="vi">@secret_key</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">get_conn</span>
+    <span class="no">Faraday</span><span class="o">::</span><span class="no">Connection</span><span class="o">.</span><span class="n">new</span> <span class="vi">@url</span><span class="p">,</span> <span class="n">ssl_opts</span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

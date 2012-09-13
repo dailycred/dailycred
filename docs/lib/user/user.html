@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>user.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../dailycred.html">dailycred.rb</a>
+          <a class="source" href="../generators/dailycred_generator.html">dailycred_generator.rb</a>
+          <a class="source" href="../generators/templates/migration_create_user.html">migration_create_user.rb</a>
+          <a class="source" href="../generators/templates/omniauth.html">omniauth.rb</a>
+          <a class="source" href="../generators/templates/sessions_controller.html">sessions_controller.rb</a>
+          <a class="source" href="../generators/templates/user.html">user.rb</a>
+          <a class="source" href="../middleware/middleware.html">middleware.rb</a>
+          <a class="source" href="../omniauth-dailycred/version.html">version.rb</a>
+          <a class="source" href="../omniauth/strategies/dailycred.html">dailycred.rb</a>
+          <a class="source" href="user.html">user.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>user.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nc">Dailycred</span>
+  <span class="k">class</span> <span class="nc">Auth</span>
+    <span class="kp">include</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">Validations</span>
+    <span class="kp">include</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">Serialization</span>
+
+    <span class="n">validates_presence_of</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:pass</span>
+
+    <span class="kp">attr_accessor</span> <span class="ss">:client</span><span class="p">,</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:pass</span><span class="p">,</span> <span class="ss">:authorized</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span> <span class="n">client</span><span class="p">,</span> <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="nb">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+      <span class="nb">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="kp">false</span>
+      <span class="n">user</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span>
+        <span class="nb">self</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">respond_to</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">login</span>
+      <span class="k">if</span> <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">valid?</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>it didn&rsquo;t work already, return false</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">return</span> <span class="kp">false</span>
+      <span class="k">end</span>
+
+      <span class="n">response</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span> <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">to_hash</span><span class="p">)</span>
+      <span class="n">err_parser</span> <span class="n">response</span>
+
+      <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="o">!</span><span class="nb">self</span><span class="o">.</span><span class="n">valid?</span>
+      <span class="kp">true</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">to_hash</span>
+      <span class="p">{</span>
+        <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="nb">self</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+        <span class="ss">:pass</span> <span class="o">=&gt;</span> <span class="nb">self</span><span class="o">.</span><span class="n">pass</span>
+      <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>response is a hash, which is
+a json-parsed http response body</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">err_parser</span> <span class="n">response</span>
+      <span class="k">if</span> <span class="o">!</span><span class="n">response</span><span class="o">[</span><span class="s2">&quot;worked&quot;</span><span class="o">]</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="kp">false</span>
+        <span class="n">response</span><span class="o">[</span><span class="s2">&quot;errors&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">err</span><span class="o">|</span>
+          <span class="n">attrib</span> <span class="o">=</span> <span class="n">err</span><span class="o">[</span><span class="s2">&quot;attribute&quot;</span><span class="o">]</span>
+          <span class="n">message</span> <span class="o">=</span> <span class="n">err</span><span class="o">[</span><span class="s2">&quot;message&quot;</span><span class="o">]</span>
+          <span class="k">if</span> <span class="n">attrib</span> <span class="o">==</span> <span class="s2">&quot;form&quot;</span>
+            <span class="nb">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add_to_base</span> <span class="n">message</span>
+          <span class="k">else</span>
+            <span class="k">if</span> <span class="n">attrib</span> <span class="o">==</span> <span class="s2">&quot;user&quot;</span>
+              <span class="nb">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span> <span class="ss">:email</span><span class="p">,</span> <span class="n">message</span>
+            <span class="k">elsif</span> <span class="nb">self</span><span class="o">.</span><span class="n">respond_to</span> <span class="n">attrib</span>
+              <span class="nb">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span> <span class="n">attrib</span><span class="p">,</span> <span class="n">message</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

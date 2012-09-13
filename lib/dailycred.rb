@@ -14,9 +14,10 @@ class Dailycred
   }
 
   # Initializes a dailycred object
-  # @param [String] client_id the client's daiycred client id
-  # @param [String] secret_key the clients secret key
-  # @param [Hash] opts a hash of options
+  #
+  # - @param [String] client\_id the client's daiycred client id
+  # - @param [String] secret\_key the clients secret key
+  # - @param [Hash] opts a hash of options
   def initialize(client_id, secret_key="", opts={})
     @client_id = client_id
     @secret_key = secret_key
@@ -26,9 +27,10 @@ class Dailycred
   end
 
   # Generates a Dailycred event
-  # @param [String] user_id the user's dailycred user id
-  # @param [String] key the name of the event type
-  # @param [String] val the value of the event (optional)
+  #
+  # - @param [String] user_id the user's dailycred user id
+  # - @param [String] key the name of the event type
+  # - @param [String] val the value of the event (optional)
   def event(user_id, key, val="")
     opts = {
       :key => key,
@@ -39,8 +41,9 @@ class Dailycred
   end
 
   # Tag a user in dailycred
-  # @param [String] user_id the user's dailycred user id
-  # @param [String] tag the desired tag to add
+  #
+  # - @param [String] user_id the user's dailycred user id
+  # - @param [String] tag the desired tag to add
   def tag(user_id, tag)
     opts = {
       :user_id => user_id,

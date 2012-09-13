@@ -5,7 +5,7 @@ dc_id = Rails.configuration.DAILYCRED_CLIENT_ID
 dc_secret = Rails.configuration.DAILYCRED_SECRET_KEY
 
 dc_options = { :client_options => {
-        :site => "http://localhost:9000",
+        :site => "https://www.dailycred.com",
         :authorize_url => '/oauth/authorize',
         :token_url => '/oauth/access_token'
       } }

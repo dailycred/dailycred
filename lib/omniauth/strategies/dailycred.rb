@@ -4,17 +4,22 @@ require 'net/https'
 require 'json'
 require 'pp'
 
+# #The Dailycred Omniauth Strategy
 module OmniAuth
   module Strategies
     class Dailycred < OmniAuth::Strategies::OAuth2
 
+      # default options
       option :client_options, {
         :site => "https://www.dailycred.com",
         :authorize_url => '/oauth/authorize',
         :token_url => '/oauth/access_token'
       }
 
+      # parameters to expect and return from dailycred responses
       ATTRIBUTES = ["email", "username", "created", "verified", "admin", "referred_by", "tags", "referred"]
+
+      # allows parameters to be passed through
       AUTH_PARAMS = ["action"]
 
       option :authorize_options, OmniAuth::Strategies::Dailycred::AUTH_PARAMS
@@ -34,6 +39,7 @@ module OmniAuth
         end
       end
 
+      # this step allows auth_params to be added to the url
       def request_phase
         OmniAuth::Strategies::Dailycred::AUTH_PARAMS.each do |param|
           val = session['omniauth.params'][param]
@@ -47,11 +53,10 @@ module OmniAuth
 
       private
 
+      # This is the phase where the gem calls me.json, which returns information about the user
       def user
         return @duser if !@duser.nil?
-        connection = Faraday::Connection.new options.client_options[:site], :ssl => {
-          :ca_file => "/opt/local/share/curl/curl-ca-bundle.crt"
-        }
+        connection = Faraday::Connection.new options.client_options[:site], options.client_options[:ssl]
         response = connection.get("/graph/me.json?access_token=#{access_token.token}")
         json = JSON.parse(response.body)
         pp json

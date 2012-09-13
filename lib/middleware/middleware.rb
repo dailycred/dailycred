@@ -6,6 +6,7 @@ class Dailycred
       @opts = opts
       @opts[:url] ||= "https://www.dailycred.com"
       @opts[:modal] ||= false
+      @opts[:sdk] ||= false
       @opts[:triggers] ||= []
       @app = app
       @client_id = client_id
@@ -53,13 +54,13 @@ class Dailycred
         document.body.appendChild(dc);
       }).call(this);
       </script>
-      <script src="#{@opts[:url]}/public/js/dailycred.coffee"></script>
+      #{'<!--' unless @opts[:sdk]}<script src="#{@opts[:url]}/public/js/dailycred.coffee"></script>
       <script>
       DC.init({
-          "showModal" : #{@opts[:modal]},
-          "triggers"  : #{@opts[:triggers].to_s}
+          "showModal" : #{@opts[:modal]}
+          #{',"modal":{"triggers":'+@opts[:triggers].to_s+'}' if @opts[:modal]}
         });
-      </script>
+      </script>#{'-->' unless @opts[:sdk]}
       <!-- end dailycred -->
       EOT
     end
