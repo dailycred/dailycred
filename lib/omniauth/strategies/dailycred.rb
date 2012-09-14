@@ -56,7 +56,6 @@ module OmniAuth
       # This is the phase where the gem calls me.json, which returns information about the user
       def user
         return @duser if !@duser.nil?
-        pp options.client_options[:ssl]
         connection = Faraday::Connection.new options.client_options[:site], :ssl => options.client_options[:ssl]
         response = connection.get("/graph/me.json?access_token=#{access_token.token}")
         json = JSON.parse(response.body)
@@ -71,7 +70,7 @@ module OmniAuth
           @duser['facebook'] = json["FACEBOOK"]["members"]
           @duser['facebook']['access_token'] = json["FACEBOOK"]['access_token']
         end
-        pp @duser
+        # pp @duser
 
         @duser
       end
