@@ -71,7 +71,7 @@
       <td class=code>
         <div class='highlight'><pre>      <span class="n">option</span> <span class="ss">:client_options</span><span class="p">,</span> <span class="p">{</span>
         <span class="ss">:site</span> <span class="o">=&gt;</span> <span class="s2">&quot;https://www.dailycred.com&quot;</span><span class="p">,</span>
-        <span class="ss">:authorize_url</span> <span class="o">=&gt;</span> <span class="s1">&#39;/oauth/authorize&#39;</span><span class="p">,</span>
+        <span class="ss">:authorize_url</span> <span class="o">=&gt;</span> <span class="s1">&#39;/connect&#39;</span><span class="p">,</span>
         <span class="ss">:token_url</span> <span class="o">=&gt;</span> <span class="s1">&#39;/oauth/access_token&#39;</span>
       <span class="p">}</span></pre></div>
       </td>
@@ -95,7 +95,7 @@
         <p>allows parameters to be passed through</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="no">AUTH_PARAMS</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;action&quot;</span><span class="o">]</span>
+        <div class='highlight'><pre>      <span class="no">AUTH_PARAMS</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;action&quot;</span><span class="p">,</span><span class="s2">&quot;identity_provider&quot;</span><span class="p">,</span><span class="s2">&quot;referrer&quot;</span><span class="o">]</span>
 
       <span class="n">option</span> <span class="ss">:authorize_options</span><span class="p">,</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">Dailycred</span><span class="o">::</span><span class="no">AUTH_PARAMS</span>
 
@@ -143,16 +143,24 @@
           <a class="pilcrow" href="#section-7">&#182;</a>
         </div>
         <p>This is the phase where the gem calls me.json, which returns information about the user</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">user</span>
         <span class="k">return</span> <span class="vi">@duser</span> <span class="k">if</span> <span class="o">!</span><span class="vi">@duser</span><span class="o">.</span><span class="n">nil?</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="no">Faraday</span><span class="o">::</span><span class="no">Connection</span><span class="o">.</span><span class="n">new</span> <span class="n">options</span><span class="o">.</span><span class="n">client_options</span><span class="o">[</span><span class="ss">:site</span><span class="o">]</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">client_options</span><span class="o">[</span><span class="ss">:ssl</span><span class="o">]</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/graph/me.json?access_token=</span><span class="si">#{</span><span class="n">access_token</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-        <span class="n">pp</span> <span class="n">json</span>
-        <span class="vi">@duser</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;token&#39;</span> <span class="o">=&gt;</span> <span class="n">access_token</span><span class="o">.</span><span class="n">token</span><span class="p">}</span>
+        <span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>pp json</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="vi">@duser</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;token&#39;</span> <span class="o">=&gt;</span> <span class="n">access_token</span><span class="o">.</span><span class="n">token</span><span class="p">}</span>
         <span class="vi">@duser</span><span class="o">[</span><span class="s1">&#39;provider&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;dailycred&#39;</span>
         <span class="vi">@duser</span><span class="o">[</span><span class="s1">&#39;uid&#39;</span><span class="o">]</span> <span class="o">=</span>  <span class="n">json</span><span class="o">[</span><span class="s1">&#39;id&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="n">json</span><span class="o">[</span><span class="s1">&#39;user_id&#39;</span><span class="o">]</span>
         <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Strategies</span><span class="o">::</span><span class="no">Dailycred</span><span class="o">::</span><span class="no">ATTRIBUTES</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="kp">attr</span><span class="o">|</span>
@@ -160,10 +168,20 @@
         <span class="k">end</span>
         <span class="k">if</span> <span class="o">!</span><span class="n">json</span><span class="o">[</span><span class="s2">&quot;FACEBOOK&quot;</span><span class="o">].</span><span class="n">nil?</span>
           <span class="vi">@duser</span><span class="o">[</span><span class="s1">&#39;facebook&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">[</span><span class="s2">&quot;FACEBOOK&quot;</span><span class="o">][</span><span class="s2">&quot;members&quot;</span><span class="o">]</span>
-        <span class="k">end</span>
-        <span class="n">pp</span> <span class="vi">@duser</span>
+          <span class="vi">@duser</span><span class="o">[</span><span class="s1">&#39;facebook&#39;</span><span class="o">][</span><span class="s1">&#39;access_token&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">[</span><span class="s2">&quot;FACEBOOK&quot;</span><span class="o">][</span><span class="s1">&#39;access_token&#39;</span><span class="o">]</span>
+        <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>pp @duser</p>
 
-        <span class="vi">@duser</span>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="vi">@duser</span>
       <span class="k">end</span>
 
     <span class="k">end</span>

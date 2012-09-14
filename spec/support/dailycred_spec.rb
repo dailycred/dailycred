@@ -35,24 +35,37 @@ describe Dailycred do
   end
 
   it "tags a user" do
-    response = @dc.tag(@user_id, "loser")
-    json = JSON.parse response.body
+    json = json_response @dc.tag(@user_id, "loser")
     json["worked"].should == true
     user = json["user"]
     # user["tags"].should include('loser') #will work in next push
   end
 
   it "untags a user" do
-    response = @dc.untag(@user_id, "loser")
-    json = JSON.parse response.body
+    json = json_response @dc.untag(@user_id, "loser")
     json["worked"].should == true
     user = json["user"]
     # user["tags"].should == nil #will work in next push
   end
 
   it "fires an event" do
-    response = @dc.event(@user_id, "became a loser")
-    json = JSON.parse response.body
+    json = json_response @dc.event(@user_id, "became a loser")
     json["worked"].should == true
+  end
+
+  it "resets a password" do
+    json = json_response @dc.passReset("useruseruseruser@gmail.com")
+    json["worked"].should == true
+  end
+
+  # it "changes a password" do
+  #   json = json_response @dc.changePass("0c19c355-2a71-4c8e-805e-f7a6087ea84c", "wrongPass", "newPass")
+  #   json["worked"].should == false
+  #   json["message"].should != nil
+  # end
+
+
+  def json_response response
+    JSON.parse response.body
   end
 end

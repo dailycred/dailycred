@@ -20,7 +20,7 @@ module OmniAuth
       ATTRIBUTES = ["email", "username", "created", "verified", "admin", "referred_by", "tags", "referred"]
 
       # allows parameters to be passed through
-      AUTH_PARAMS = ["action"]
+      AUTH_PARAMS = ["action","identity_provider","referrer"]
 
       option :authorize_options, OmniAuth::Strategies::Dailycred::AUTH_PARAMS
 
@@ -59,7 +59,7 @@ module OmniAuth
         connection = Faraday::Connection.new options.client_options[:site], options.client_options[:ssl]
         response = connection.get("/graph/me.json?access_token=#{access_token.token}")
         json = JSON.parse(response.body)
-        pp json
+        # pp json
         @duser = {'token' => access_token.token}
         @duser['provider'] = 'dailycred'
         @duser['uid'] =  json['id'] || json['user_id']
@@ -68,8 +68,9 @@ module OmniAuth
         end
         if !json["FACEBOOK"].nil?
           @duser['facebook'] = json["FACEBOOK"]["members"]
+          @duser['facebook']['access_token'] = json["FACEBOOK"]['access_token']
         end
-        pp @duser
+        # pp @duser
 
         @duser
       end

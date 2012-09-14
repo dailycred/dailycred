@@ -10,6 +10,7 @@ class DailycredGenerator < Rails::Generators::Base
   match '/auth/:provider/callback' => 'sessions#create'
   match "/logout" => "sessions#destroy", :as => :logout
   match "/auth" => "sessions#info", :as => :auth
+  match "/auth/dailycred"
   EOS
 
   APP_CONTROLLER_LINES =<<-EOS
@@ -33,16 +34,6 @@ class DailycredGenerator < Rails::Generators::Base
     redirect_to auth_path unless current_user
   end
 
-  # link to sign up
-  def signup_path
-    "/auth/dailycred"
-  end
-
-  # link to login
-  def login_path
-    "/auth/dailycred?action=signin"
-  end
-
   # helper method for getting an instance of dailycred
   # example:
   #   dailycred.tagUser "user_id", "tag"
@@ -51,6 +42,13 @@ class DailycredGenerator < Rails::Generators::Base
   def dailycred
     config = Rails.configuration
     @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.dc_options)
+  end
+  EOS
+
+  APP_HELPER_LINES = <<-EOS
+  def connect_path(provider)
+    url = "/auth/dailycred?identity_provider=#{provider.to_s}"
+    url += "&referrer=#{request.protocol}#{request.host_with_port}#{request.fullpath}"
   end
   EOS
 
@@ -75,6 +73,8 @@ class DailycredGenerator < Rails::Generators::Base
     copy_file "sessions_controller.rb", "app/controllers/sessions_controller.rb"
     # application controller
     inject_into_class "app/controllers/application_controller.rb", ApplicationController, APP_CONTROLLER_LINES
+    # application helper
+    inject_into_class "app/helpers/application_helper.rb", ApplicationController, APP_HELPER_LINES
     # add user_model
     copy_file "user.rb", "app/models/user.rb"
     # session_controller

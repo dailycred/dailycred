@@ -133,7 +133,6 @@
         </div>
         <p>Untag a user in dailycred
 (see #tag)</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">untag</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
@@ -142,10 +141,47 @@
       <span class="ss">:tag</span> <span class="o">=&gt;</span> <span class="n">tag</span>
     <span class="p">}</span>
     <span class="n">post</span> <span class="s2">&quot;/admin/api/user/untag.json&quot;</span><span class="p">,</span> <span class="n">opts</span>
-  <span class="k">end</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Send a reset password email</p>
 
-  <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
-    <span class="n">opts</span><span class="o">.</span><span class="n">merge!</span> <span class="n">base_opts</span>
+<ul>
+<li>@param [string] user the user&rsquo;s email or username</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">passReset</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="n">user</span>
+    <span class="p">}</span>
+    <span class="n">post</span> <span class="s2">&quot;/password/api/reset&quot;</span><span class="p">,</span> <span class="n">opts</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>A wildcard for making any post requests to dailycred.
+client<em>id and client</em>secret are automatically added to the request</p>
+
+<ul>
+<li>@param [string] url</li>
+<li>@param [hash] opts</li>
+<li>@param [boolean] secure whether the client_secret should be passed. Defaults to true</li>
+</ul>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="kp">true</span><span class="p">)</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">merge!</span> <span class="n">base_opts</span><span class="p">(</span><span class="n">secure</span><span class="p">)</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">get_conn</span><span class="o">.</span><span class="n">post</span> <span class="n">url</span><span class="p">,</span> <span class="n">opts</span>
   <span class="k">end</span>
 
@@ -159,11 +195,10 @@
     <span class="n">opts</span>
   <span class="k">end</span>
 
-  <span class="k">def</span> <span class="nf">base_opts</span>
-    <span class="p">{</span>
-      <span class="ss">:client_id</span> <span class="o">=&gt;</span> <span class="vi">@client_id</span><span class="p">,</span>
-      <span class="ss">:client_secret</span> <span class="o">=&gt;</span> <span class="vi">@secret_key</span>
-    <span class="p">}</span>
+  <span class="k">def</span> <span class="nf">base_opts</span> <span class="n">secure</span><span class="o">=</span><span class="kp">true</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:client_id</span> <span class="o">=&gt;</span> <span class="vi">@client_id</span><span class="p">}</span>
+    <span class="n">opts</span><span class="o">[</span><span class="ss">:client_secret</span><span class="o">]</span> <span class="o">=</span> <span class="vi">@secret_key</span> <span class="k">if</span> <span class="n">secure</span>
+    <span class="n">opts</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">get_conn</span>

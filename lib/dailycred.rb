@@ -62,8 +62,24 @@ class Dailycred
     post "/admin/api/user/untag.json", opts
   end
 
-  def post(url, opts)
-    opts.merge! base_opts
+  # Send a reset password email
+  #
+  # - @param [string] user the user's email or username
+  def passReset(user)
+    opts = {
+      :user => user
+    }
+    post "/password/api/reset", opts
+  end
+
+  # A wildcard for making any post requests to dailycred.
+  # client_id and client_secret are automatically added to the request
+  #
+  # - @param [string] url
+  # - @param [hash] opts
+  # - @param [boolean] secure whether the client_secret should be passed. Defaults to true
+  def post(url, opts, secure=true)
+    opts.merge! base_opts(secure)
     response = get_conn.post url, opts
   end
 
@@ -77,11 +93,10 @@ class Dailycred
     opts
   end
 
-  def base_opts
-    {
-      :client_id => @client_id,
-      :client_secret => @secret_key
-    }
+  def base_opts secure=true
+    opts = {:client_id => @client_id}
+    opts[:client_secret] = @secret_key if secure
+    opts
   end
 
   def get_conn

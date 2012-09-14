@@ -1,4 +1,6 @@
-require 'helper_spec'
+# require 'helper_spec'
+require 'omniauth'
+require 'dailycred'
 describe OmniAuth::Strategies::Dailycred do
   subject do
     OmniAuth::Strategies::Dailycred.new(nil, @options || {})
