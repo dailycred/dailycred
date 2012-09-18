@@ -9,8 +9,9 @@ class DailycredGenerator < Rails::Generators::Base
   APP_ROUTES_LINES =<<-EOS
   match '/auth/:provider/callback' => 'sessions#create'
   match "/logout" => "sessions#destroy", :as => :logout
-  match "/auth" => "sessions#info", :as => :auth
-  match "/auth/dailycred"
+  match "/auth" => "sessions#info", :as => :auth_info
+  match "/auth/dailycred", :as => :auth
+  match "/auth/failure" => "sessions#failure"
   EOS
 
   APP_CONTROLLER_LINES =<<-EOS

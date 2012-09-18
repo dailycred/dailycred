@@ -38,14 +38,14 @@ describe Dailycred do
     json = json_response @dc.tag(@user_id, "loser")
     json["worked"].should == true
     user = json["user"]
-    # user["tags"].should include('loser') #will work in next push
+    user["tags"].should include('loser') #will work in next push
   end
 
   it "untags a user" do
     json = json_response @dc.untag(@user_id, "loser")
     json["worked"].should == true
     user = json["user"]
-    # user["tags"].should == nil #will work in next push
+    user["tags"].should == nil #will work in next push
   end
 
   it "fires an event" do

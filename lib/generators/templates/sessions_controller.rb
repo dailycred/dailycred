@@ -6,13 +6,17 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_or_create_with_omniauth auth_hash
     session[:user_id] = @user.id
-    redirect_to "/auth"
+    redirect_to auth_info_path
   end
 
   #GET /logout
   def destroy
     session[:user_id] = nil
-    redirect_to auth_path
+    redirect_to auth_info_path
+  end
+
+  def failure
+    redirect_to auth_info_path, notice: params[:message]
   end
 
   def info
