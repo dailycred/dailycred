@@ -44,6 +44,12 @@ class DailycredGenerator < Rails::Generators::Base
     config = Rails.configuration
     @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.dc_options)
   end
+
+  # when making oauth calls, we may need to redirect to our oauth callback url
+  # make sure we have the correct state passed back and forth
+  def set_state
+    @state = session["omniauth.state"] = SecureRandom.uuid
+  end
   EOS
 
   APP_HELPER_LINES = <<-EOS

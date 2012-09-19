@@ -1,6 +1,8 @@
 require "omniauth-dailycred/version"
 require "omniauth/strategies/dailycred"
 require "middleware/middleware"
+# require "dailycred/helper"
+# require "dailycred/user"
 
 class Dailycred
 

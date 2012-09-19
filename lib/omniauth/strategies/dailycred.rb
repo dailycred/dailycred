@@ -12,7 +12,7 @@ module OmniAuth
       # default options
       option :client_options, {
         :site => "https://www.dailycred.com",
-        :authorize_url => '/oauth/authorize',
+        :authorize_url => '/connect',
         :token_url => '/oauth/access_token'
       }
 

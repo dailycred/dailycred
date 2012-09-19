@@ -1,0 +1,4 @@
+class DailycredHelper
+
+
+end
