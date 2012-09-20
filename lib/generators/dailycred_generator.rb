@@ -1,19 +1,7 @@
+require 'rails/generators'
 class DailycredGenerator < Rails::Generators::Base
   require 'faraday'
   source_root File.expand_path('../templates', __FILE__)
-
-  argument :client_id, :type => :string, :default => 'YOUR_CLIENT_ID', :banner => 'dailycred_client_id'
-  argument :secret_key, :type => :string, :default => 'YOUR_SECRET_KEY', :banner => 'dailycred_secret_key'
-
-  APP_NAME = Rails.application.class.parent.name
-
-  APP_ROUTES_LINES =<<-EOS
-  match '/auth/:provider/callback' => 'sessions#create'
-  match "/logout" => "sessions#destroy", :as => :logout
-  match "/auth" => "sessions#info", :as => :auth_info
-  match "/auth/dailycred", :as => :auth
-  match "/auth/failure" => "sessions#failure"
-  EOS
 
   APP_CONTROLLER_LINES =<<-EOS
   helper_method :current_user, :login_path, :dailycred, :signup_path
@@ -55,8 +43,8 @@ class DailycredGenerator < Rails::Generators::Base
 
   APP_HELPER_LINES = <<-EOS
   def connect_path(provider)
-    url = "/auth/dailycred?identity_provider=#{provider.to_s}"
-    url += "&referrer=#{request.protocol}#{request.host_with_port}#{request.fullpath}"
+    url = "/auth/dailycred?identity_provider=\#{provider.to_s}"
+    url += "&referrer=\#{request.protocol}\#{request.host_with_port}\#{request.fullpath}"
   end
   EOS
 
@@ -78,12 +66,13 @@ class DailycredGenerator < Rails::Generators::Base
 
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
+    get_info
     # session_controller
     copy_file "sessions_controller.rb", "app/controllers/sessions_controller.rb"
     # application controller
-    inject_into_class "app/controllers/application_controller.rb", ApplicationController, APP_CONTROLLER_LINES
+    inject_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController/
     # application helper
-    inject_into_class "app/helpers/application_helper.rb", ApplicationController, APP_HELPER_LINES
+    inject_into_class "app/helpers/application_helper.rb", APP_HELPER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
     # add user_model
     copy_file "user.rb", "app/models/user.rb"
     # session_controller
@@ -91,7 +80,11 @@ class DailycredGenerator < Rails::Generators::Base
     # auth page
     copy_file "info.html.erb", "app/views/sessions/info"
     # config/routes
-    inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => "#{APP_NAME}::Application.routes.draw do\n"
+    route 'match "/auth/:provider/callback" => "sessions#create"'
+    route 'match "/logout" => "sessions#destroy", :as => :logout'
+    route 'match "/auth" => "sessions#info", :as => :auth_info'
+    route 'match "/auth/dailycred", :as => :auth'
+    route 'match "/auth/failure" => "sessions#failure"'
   end
 
   private
@@ -104,7 +97,7 @@ class DailycredGenerator < Rails::Generators::Base
       puts "Invalid email and password. Try again or type 'n' to skip."
     end
     puts ''
-    print "Enter email:"
+    print "Email:"
     email = gets.chomp
     if email != "n"
       stty_settings = %x[stty -g]
@@ -115,6 +108,7 @@ class DailycredGenerator < Rails::Generators::Base
       ensure
         %x[stty #{stty_settings}]
       end
+      #ssl opts
       ssl_opts = {}
       if File.exists?('/etc/ssl/certs')
         ssl_opts = { :ca_path => '/etc/ssl/certs'}
@@ -124,19 +118,17 @@ class DailycredGenerator < Rails::Generators::Base
       end
       connection = Faraday::Connection.new "http://localhost:9000/", :ssl => ssl_opts
       params = {
-        :login => email
-        :pass => password
+        :login => email,
+        :pass => password,
         :client_id => "dailycred"
       }
       response = connection.post("/user/api/signin.json", params)
-      p response_body
       json = JSON.parse(response.body)
       if !json["worked"]
         # wrong password
         get_info false
       end
       access_token = json["access_token"]
-      p access_token
       response = connection.post("graph/clientinfo.json", :access_token => access_token)
       json = JSON.parse(response.body)
       if !json["worked"]
@@ -144,8 +136,9 @@ class DailycredGenerator < Rails::Generators::Base
       end
       client_id = json["clientId"]
       client_secret = json["clientSecret"]
-      file_gsub "config/initializers/omniauth.rb", "YOUR_CLIENT_ID", client_id
-      file_gsub "config/initializers/omniauth.rb", "YOUR_SECRET_KEY", client_secret
+      gsub_file "config/initializers/omniauth.rb", /YOUR_CLIENT_ID/, client_id
+      gsub_file "config/initializers/omniauth.rb", /YOUR_SECRET_KEY/, client_secret
     end
+  end
 
 end

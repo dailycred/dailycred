@@ -1,5 +1,5 @@
-Rails.configuration.DAILYCRED_CLIENT_ID = "<%= client_id %>"
-Rails.configuration.DAILYCRED_SECRET_KEY = "<%= secret_key %>"
+Rails.configuration.DAILYCRED_CLIENT_ID = "YOUR_CLIENT_ID"
+Rails.configuration.DAILYCRED_SECRET_KEY = "YOUR_SECRET_KEY"
 
 dc_id = Rails.configuration.DAILYCRED_CLIENT_ID
 dc_secret = Rails.configuration.DAILYCRED_SECRET_KEY
