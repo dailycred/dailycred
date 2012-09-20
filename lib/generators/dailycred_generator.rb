@@ -1,4 +1,5 @@
 class DailycredGenerator < Rails::Generators::Base
+  require 'faraday'
   source_root File.expand_path('../templates', __FILE__)
 
   argument :client_id, :type => :string, :default => 'YOUR_CLIENT_ID', :banner => 'dailycred_client_id'
@@ -73,7 +74,8 @@ class DailycredGenerator < Rails::Generators::Base
     *****
     *****
     EOS
-    print dailycred_ascii
+    puts dailycred_ascii
+
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
     # session_controller
@@ -91,4 +93,59 @@ class DailycredGenerator < Rails::Generators::Base
     # config/routes
     inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => "#{APP_NAME}::Application.routes.draw do\n"
   end
+
+  private
+
+  def get_info first=true
+    if first
+      puts "Please insert your dailycred credentials. You must sign up for a free account at "+
+        "http://www.dailycred.com. This is to automatically configure your api keys. If you wish to skip, enter 'n' as your email."
+    else
+      puts "Invalid email and password. Try again or type 'n' to skip."
+    end
+    puts ''
+    print "Enter email:"
+    email = gets.chomp
+    if email != "n"
+      stty_settings = %x[stty -g]
+      print 'Password: '
+      begin
+        %x[stty -echo]
+        password = gets
+      ensure
+        %x[stty #{stty_settings}]
+      end
+      ssl_opts = {}
+      if File.exists?('/etc/ssl/certs')
+        ssl_opts = { :ca_path => '/etc/ssl/certs'}
+      end
+      if File.exists?('/opt/local/share/curl/curl-ca-bundle.crt')
+        ssl_opts = { :ca_file => '/opt/local/share/curl/curl-ca-bundle.crt' }
+      end
+      connection = Faraday::Connection.new "http://localhost:9000/", :ssl => ssl_opts
+      params = {
+        :login => email
+        :pass => password
+        :client_id => "dailycred"
+      }
+      response = connection.post("/user/api/signin.json", params)
+      p response_body
+      json = JSON.parse(response.body)
+      if !json["worked"]
+        # wrong password
+        get_info false
+      end
+      access_token = json["access_token"]
+      p access_token
+      response = connection.post("graph/clientinfo.json", :access_token => access_token)
+      json = JSON.parse(response.body)
+      if !json["worked"]
+        # weird error
+      end
+      client_id = json["clientId"]
+      client_secret = json["clientSecret"]
+      file_gsub "config/initializers/omniauth.rb", "YOUR_CLIENT_ID", client_id
+      file_gsub "config/initializers/omniauth.rb", "YOUR_SECRET_KEY", client_secret
+    end
+
 end

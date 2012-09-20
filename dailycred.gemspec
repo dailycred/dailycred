@@ -8,12 +8,12 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://www.dailycred.com"
   gem.add_dependency("omniauth")
   gem.add_dependency("omniauth-oauth2")
-  gem.add_dependency("securerandom")
+
 
   gem.files         = `git ls-files`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dailycred"
   gem.require_paths = ["lib"]
-  gem.version       = "0.1.28"
+  gem.version       = "0.1.29"
 end
