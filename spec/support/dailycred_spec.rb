@@ -1,5 +1,6 @@
 require 'json'
 require 'pp'
+require 'dailycred'
 describe Dailycred do
   subject do
 

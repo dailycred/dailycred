@@ -1,7 +1,25 @@
 require 'rails/generators'
+require 'pp'
+require 'json'
+require 'faraday'
 class DailycredGenerator < Rails::Generators::Base
   require 'faraday'
   source_root File.expand_path('../templates', __FILE__)
+
+  CLIENT_ID_DEFAULT = 'YOUR_CLIENT_ID'
+  CLIENT_SECRET_DEFAULT = 'YOUR_SECRET_KEY'
+
+  argument :client_id, :type => :string, :default => CLIENT_ID_DEFAULT, :banner => 'dailycred_client_id'
+  argument :secret_key, :type => :string, :default => CLIENT_SECRET_DEFAULT, :banner => 'dailycred_secret_key'
+  argument :get_input, type: :string, default: 'true', enum: ['true', 'false']
+
+  APP_ROUTES_LINES =<<-EOS
+  match "/auth/:provider/callback" => "sessions#create"
+  match "/logout" => "sessions#destroy", :as => :logout
+  match "/auth" => "sessions#info", :as => :auth
+  match "/auth/dailycred", :as => :login
+  match "/auth/failure" => "sessions#failure"
+  EOS
 
   APP_CONTROLLER_LINES =<<-EOS
   helper_method :current_user, :login_path, :dailycred, :signup_path
@@ -63,28 +81,27 @@ class DailycredGenerator < Rails::Generators::Base
     *****
     EOS
     puts dailycred_ascii
-
+    @get_input = @get_input == "true" ? true : false
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
-    get_info
+    # get client info from login if they didnt specify info
+    if @client_id == CLIENT_ID_DEFAULT && @get_input
+      get_info
+    end
     # session_controller
     copy_file "sessions_controller.rb", "app/controllers/sessions_controller.rb"
     # application controller
-    inject_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController/
+    insert_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
     # application helper
-    inject_into_class "app/helpers/application_helper.rb", APP_HELPER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
+    insert_into_file "app/helpers/application_helper.rb", APP_HELPER_LINES, :after => /module ApplicationHelper\n|module ApplicationHelper .*\n/
     # add user_model
     copy_file "user.rb", "app/models/user.rb"
     # session_controller
     copy_file "migration_create_user.rb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_create_users.rb"
     # auth page
-    copy_file "info.html.erb", "app/views/sessions/info"
+    copy_file "info.html.erb", "app/views/sessions/info.html.erb"
     # config/routes
-    route 'match "/auth/:provider/callback" => "sessions#create"'
-    route 'match "/logout" => "sessions#destroy", :as => :logout'
-    route 'match "/auth" => "sessions#info", :as => :auth_info'
-    route 'match "/auth/dailycred", :as => :auth'
-    route 'match "/auth/failure" => "sessions#failure"'
+    inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => ".draw do\n"
   end
 
   private
@@ -96,49 +113,70 @@ class DailycredGenerator < Rails::Generators::Base
     else
       puts "Invalid email and password. Try again or type 'n' to skip."
     end
+    #ssl opts
+    # $stderr.puts 'getting input'
+    input = get_input
+    email, password = input[0], input[1]
+    # $stderr.puts 'got input'
+    return if email == "n"
+    ssl_opts = {}
+    if File.exists?('/etc/ssl/certs')
+      ssl_opts = { :ca_path => '/etc/ssl/certs'}
+    end
+    if File.exists?('/opt/local/share/curl/curl-ca-bundle.crt')
+      ssl_opts = { :ca_file => '/opt/local/share/curl/curl-ca-bundle.crt' }
+    end
+    # url = "https://www.dailycred.com"
+    # url = "http://localhost:9000"
+    # staging server for a very short time
+    url = "http://ec2-72-44-40-55.compute-1.amazonaws.com:9000"
+    connection = Faraday::Connection.new url, :ssl => ssl_opts
+    params = {
+      :login => email,
+      :pass => password,
+      :client_id => "dailycred"
+    }
+    response = connection.post("user/api/signin.json", params)
+    json = JSON.parse(response.body)
+    if !json["worked"]
+      # wrong password
+      p ''
+      get_info false
+    end
+    access_token = json["access_token"]
+    response = connection.post("graph/clientinfo.json", :access_token => access_token)
+    json = JSON.parse(response.body)
+    if !json["worked"]
+      p "There was an error retrieving your account information. Please manually configure your API keys in config/initializers/omniauth.rb"
+      return
+    end
+    @client_id = json["clientId"]
+    @secret_key = json["clientSecret"]
+    gsub_file("config/initializers/omniauth.rb", /YOUR_CLIENT_ID/, @client_id) if @client_id
+    gsub_file("config/initializers/omniauth.rb", /YOUR_SECRET_KEY/, @secret_key) if @secret_key
+  end
+
+  def get_input
     puts ''
     print "Email:"
     email = gets.chomp
-    if email != "n"
-      stty_settings = %x[stty -g]
-      print 'Password: '
-      begin
-        %x[stty -echo]
-        password = gets
-      ensure
-        %x[stty #{stty_settings}]
-      end
-      #ssl opts
-      ssl_opts = {}
-      if File.exists?('/etc/ssl/certs')
-        ssl_opts = { :ca_path => '/etc/ssl/certs'}
-      end
-      if File.exists?('/opt/local/share/curl/curl-ca-bundle.crt')
-        ssl_opts = { :ca_file => '/opt/local/share/curl/curl-ca-bundle.crt' }
-      end
-      connection = Faraday::Connection.new "http://localhost:9000/", :ssl => ssl_opts
-      params = {
-        :login => email,
-        :pass => password,
-        :client_id => "dailycred"
-      }
-      response = connection.post("/user/api/signin.json", params)
-      json = JSON.parse(response.body)
-      if !json["worked"]
-        # wrong password
-        get_info false
-      end
-      access_token = json["access_token"]
-      response = connection.post("graph/clientinfo.json", :access_token => access_token)
-      json = JSON.parse(response.body)
-      if !json["worked"]
-        # weird error
-      end
-      client_id = json["clientId"]
-      client_secret = json["clientSecret"]
-      gsub_file "config/initializers/omniauth.rb", /YOUR_CLIENT_ID/, client_id
-      gsub_file "config/initializers/omniauth.rb", /YOUR_SECRET_KEY/, client_secret
+    return email, nil if email == "n"
+    stty_settings = %x[stty -g]
+    print 'Password: '
+    begin
+      %x[stty -echo]
+      password = gets.chomp
+    ensure
+      %x[stty #{stty_settings}]
     end
+    return email, password
   end
+
+  private
+
+  def show obj
+    $stderr.puts obj
+  end
+
 
 end

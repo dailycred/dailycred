@@ -1,14 +1,10 @@
-Rails.configuration.DAILYCRED_CLIENT_ID = "YOUR_CLIENT_ID"
-Rails.configuration.DAILYCRED_SECRET_KEY = "YOUR_SECRET_KEY"
+Rails.configuration.DAILYCRED_CLIENT_ID = "<%= client_id %>"
+Rails.configuration.DAILYCRED_SECRET_KEY = "<%= secret_key %>"
 
 dc_id = Rails.configuration.DAILYCRED_CLIENT_ID
 dc_secret = Rails.configuration.DAILYCRED_SECRET_KEY
 
-dc_options = { :client_options => {
-        :site => "https://www.dailycred.com",
-        :authorize_url => '/oauth/authorize',
-        :token_url => '/oauth/access_token'
-      } }
+dc_options = { :client_options => {} }
 
 if File.exists?('/etc/ssl/certs')
   dc_options[:client_options][:ssl] = { :ca_path => '/etc/ssl/certs'}
