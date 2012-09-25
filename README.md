@@ -111,5 +111,5 @@ To specify where users should be redirected after authentication actions, setup 
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-![](https://www.dailycred.com/dc.gif?client_id=dailycred "dailycred")
+![](https://www.dailycred.com/dc.gif?client_id=dailycred&title=rails_repo "dailycred")
 
