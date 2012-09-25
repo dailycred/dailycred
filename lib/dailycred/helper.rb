@@ -15,7 +15,7 @@ module Dailycred
     # for more documentation, visit https://www.dailycred.com/api/ruby
     def dailycred
       config = Rails.configuration
-      @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.DAILYCRED_OPTIONS)
+      @dailycred ||= Dailycred::Client.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.DAILYCRED_OPTIONS)
     end
 
     # when making oauth calls, we may need to redirect to our oauth callback url
