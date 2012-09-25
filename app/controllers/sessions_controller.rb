@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     redirect_to_unauth
   end
 
-  def failure login
+  def failure
     redirect_to_unauth, notice: params[:message]
   end
 
