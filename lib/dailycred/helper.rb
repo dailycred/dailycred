@@ -5,7 +5,7 @@ module Dailycred
     # example:
     #   before_filter :authenticate
     def authenticate
-      redirect_to_auth  unless current_user
+      redirect_to_unauth unless current_user
     end
 
     # helper method for getting an instance of dailycred
@@ -31,6 +31,12 @@ module Dailycred
     def redirect_to_auth opts={}
       conf = Rails.configuration.DAILYCRED_OPTIONS
       path = !conf[:after_auth].nil? ? conf[:after_auth] : dailycred_engine.auth_info_path
+      redirect_to path, opts
+    end
+
+    def redirect_to_unauth opts = {}
+      conf = Rails.configuration.DAILYCRED_OPTIONS
+      path = !conf[:after_unauth].nil? ? conf[:after_unauth] : dailycred_engine.auth_info_path
       redirect_to path, opts
     end
 

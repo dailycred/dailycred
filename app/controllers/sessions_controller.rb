@@ -12,13 +12,11 @@ class SessionsController < ApplicationController
   #GET /logout
   def destroy
     session[:user_id] = nil
-    redirect_to_auth
+    redirect_to_unauth
   end
 
-  def failure
-    conf = Rails.configuration.DAILYCRED_OPTIONS
-    path = !conf[:after_unauth].nil? ? conf[:after_unauth] : dailycred_engine.auth_info_path
-    redirect_to path, notice: params[:message]
+  def failure login
+    redirect_to_unauth, notice: params[:message]
   end
 
   def info
