@@ -57,7 +57,8 @@
         <p>configure where users should be redirected after authentication</p>
 
 <p>Rails.configuration.DAILYCRED<em>OPTIONS = {
-  :after</em>auth =&gt; &lsquo;/&rsquo;
+  :after</em>auth =&gt; &lsquo;/hello&rsquo;, #after login
+  :after_unauth =&gt; &lsquo;/goodbye&rsquo; #after logout
 }</p>
 
       </td>
