@@ -13,15 +13,19 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="../../dailycred.html">dailycred.rb</a>
+          <a class="source" href="../../dailycred/acts_as_dailycred.html">acts_as_dailycred.rb</a>
+          <a class="source" href="../../dailycred/client.html">client.rb</a>
+          <a class="source" href="../../dailycred/engine.html">engine.rb</a>
+          <a class="source" href="../../dailycred/helper.html">helper.rb</a>
+          <a class="source" href="../../dailycred/middleware.html">middleware.rb</a>
+          <a class="source" href="../../dailycred/tests_helper.html">tests_helper.rb</a>
+          <a class="source" href="../../dailycred/user.html">user.rb</a>
           <a class="source" href="../dailycred_generator.html">dailycred_generator.rb</a>
           <a class="source" href="migration_create_user.html">migration_create_user.rb</a>
           <a class="source" href="omniauth.html">omniauth.rb</a>
           <a class="source" href="sessions_controller.html">sessions_controller.rb</a>
           <a class="source" href="user.html">user.rb</a>
-          <a class="source" href="../../middleware/middleware.html">middleware.rb</a>
-          <a class="source" href="../../omniauth-dailycred/version.html">version.rb</a>
           <a class="source" href="../../omniauth/strategies/dailycred.html">dailycred.rb</a>
-          <a class="source" href="../../user/user.html">user.rb</a>
       </div>
     </div>
   </div>
@@ -33,6 +37,34 @@
     </tr>
   </thead>
   <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">DAILYCRED_CLIENT_ID</span> <span class="o">=</span> <span class="s2">&quot;&lt;%= client_id %&gt;&quot;</span>
+<span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">DAILYCRED_SECRET_KEY</span> <span class="o">=</span> <span class="s2">&quot;&lt;%= secret_key %&gt;&quot;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>configure where users should be redirected after authentication</p>
+
+<p>Rails.configuration.DAILYCRED<em>OPTIONS = {
+  :after</em>auth =&gt; &lsquo;/&rsquo;
+}</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
   </table>
 </div>
 </body>

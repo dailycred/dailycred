@@ -1,7 +1,7 @@
 require 'json'
 require 'pp'
 require 'dailycred'
-describe Dailycred do
+describe Dailycred::Client do
   subject do
 
   end
@@ -32,7 +32,7 @@ describe Dailycred do
       dc_options[:client_options][:ssl] = { :ca_file => '/opt/local/share/curl/curl-ca-bundle.crt' }
     end
 
-    @dc = Dailycred.new client_id, secret, dc_options
+    @dc = Dailycred::Client.new client_id, secret, dc_options
   end
 
   it "tags a user" do

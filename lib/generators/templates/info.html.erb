@@ -3,5 +3,5 @@
     <%= link_to 'Logout', logout_path %>
   </p>
 <% else %>
-  <%= link_to 'Login In', login_path(:action => 'signin') %> or <%= link_to 'Sign Up', login_path(:identity_provider => :facebook) %>
+  <%= link_to 'Login In', login_path(:action => 'signin') %> or <%= link_to 'Sign Up', login_path() %>
 <% end %>

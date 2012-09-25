@@ -13,6 +13,8 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="../../dailycred.html">dailycred.rb</a>
+          <a class="source" href="../../dailycred/helper.html">helper.rb</a>
+          <a class="source" href="../../dailycred/user.html">user.rb</a>
           <a class="source" href="../dailycred_generator.html">dailycred_generator.rb</a>
           <a class="source" href="migration_create_user.html">migration_create_user.rb</a>
           <a class="source" href="omniauth.html">omniauth.rb</a>
@@ -21,7 +23,6 @@
           <a class="source" href="../../middleware/middleware.html">middleware.rb</a>
           <a class="source" href="../../omniauth-dailycred/version.html">version.rb</a>
           <a class="source" href="../../omniauth/strategies/dailycred.html">dailycred.rb</a>
-          <a class="source" href="../../user/user.html">user.rb</a>
       </div>
     </div>
   </div>
@@ -57,7 +58,7 @@
         <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">create</span>
     <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_or_create_with_omniauth</span> <span class="n">auth_hash</span>
     <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="vi">@user</span><span class="o">.</span><span class="n">id</span>
-    <span class="n">redirect_to</span> <span class="s2">&quot;/auth&quot;</span>
+    <span class="n">redirect_to</span> <span class="n">auth_path</span>
   <span class="k">end</span></pre></div>
       </td>
     </tr>
@@ -73,6 +74,10 @@
         <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">destroy</span>
     <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="kp">nil</span>
     <span class="n">redirect_to</span> <span class="n">auth_path</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">failure</span>
+    <span class="n">redirect_to</span> <span class="n">auth_path</span><span class="p">,</span> <span class="n">notice</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:message</span><span class="o">]</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">info</span>

@@ -3,8 +3,7 @@
 Gem::Specification.new do |gem|
   gem.authors       = ["Hank Stoever"]
   gem.email         = ["hstove@gmail.com"]
-  gem.description   = %q{descript}
-  gem.summary       = %q{summary}
+  gem.description   = %q{A Ruby on Rails engine for authentication with Dailycred.}
   gem.homepage      = "https://www.dailycred.com"
   gem.add_dependency("omniauth")
   gem.add_dependency("omniauth-oauth2")
@@ -15,5 +14,5 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dailycred"
   gem.require_paths = ["lib"]
-  gem.version       = "0.1.30"
+  gem.version       = "0.1.31"
 end

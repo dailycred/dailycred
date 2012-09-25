@@ -3,7 +3,6 @@ require 'pp'
 require 'json'
 require 'faraday'
 class DailycredGenerator < Rails::Generators::Base
-  require 'faraday'
   source_root File.expand_path('../templates', __FILE__)
 
   CLIENT_ID_DEFAULT = 'YOUR_CLIENT_ID'
@@ -11,14 +10,9 @@ class DailycredGenerator < Rails::Generators::Base
 
   argument :client_id, :type => :string, :default => CLIENT_ID_DEFAULT, :banner => 'dailycred_client_id'
   argument :secret_key, :type => :string, :default => CLIENT_SECRET_DEFAULT, :banner => 'dailycred_secret_key'
-  argument :get_input, type: :string, default: 'true', enum: ['true', 'false']
 
   APP_ROUTES_LINES =<<-EOS
-  match "/auth/:provider/callback" => "sessions#create"
-  match "/logout" => "sessions#destroy", :as => :logout
-  match "/auth" => "sessions#info", :as => :auth
-  match "/auth/dailycred", :as => :login
-  match "/auth/failure" => "sessions#failure"
+  mount Dailycred::Engine => '/auth', :as => 'dailycred_engine'
   EOS
 
   APP_CONTROLLER_LINES =<<-EOS
@@ -34,72 +28,21 @@ class DailycredGenerator < Rails::Generators::Base
       nil
     end
   end
-
-  # use as a before_filter to only allow signed in users
-  # example:
-  #   before_filter :authenticate
-  def authenticate
-    redirect_to auth_path unless current_user
-  end
-
-  # helper method for getting an instance of dailycred
-  # example:
-  #   dailycred.tagUser "user_id", "tag"
-  #
-  # for more documentation, visit https://www.dailycred.com/api/ruby
-  def dailycred
-    config = Rails.configuration
-    @dailycred ||= Dailycred.new(config.DAILYCRED_CLIENT_ID, config.DAILYCRED_SECRET_KEY, config.dc_options)
-  end
-
-  # when making oauth calls, we may need to redirect to our oauth callback url
-  # make sure we have the correct state passed back and forth
-  def set_state
-    @state = session["omniauth.state"] = SecureRandom.uuid
-  end
-  EOS
-
-  APP_HELPER_LINES = <<-EOS
-  def connect_path(provider)
-    url = "/auth/dailycred?identity_provider=\#{provider.to_s}"
-    url += "&referrer=\#{request.protocol}\#{request.host_with_port}\#{request.fullpath}"
-  end
   EOS
 
   def install
-    dailycred_ascii =<<-EOS
-    *****
-    *****
-    *****
-    *****
-    *****
-    *****    Thanks for using dailycred!
-    *****
-    *****
-    *****
-    *****
-    *****
-    EOS
-    puts dailycred_ascii
-    @get_input = @get_input == "true" ? true : false
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
     # get client info from login if they didnt specify info
-    if @client_id == CLIENT_ID_DEFAULT && @get_input
+    if @client_id == CLIENT_ID_DEFAULT
       get_info
     end
-    # session_controller
-    copy_file "sessions_controller.rb", "app/controllers/sessions_controller.rb"
     # application controller
     insert_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
-    # application helper
-    insert_into_file "app/helpers/application_helper.rb", APP_HELPER_LINES, :after => /module ApplicationHelper\n|module ApplicationHelper .*\n/
     # add user_model
     copy_file "user.rb", "app/models/user.rb"
     # session_controller
     copy_file "migration_create_user.rb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_create_users.rb"
-    # auth page
-    copy_file "info.html.erb", "app/views/sessions/info.html.erb"
     # config/routes
     inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => ".draw do\n"
   end
@@ -169,6 +112,7 @@ class DailycredGenerator < Rails::Generators::Base
     ensure
       %x[stty #{stty_settings}]
     end
+    p ''
     return email, password
   end
 

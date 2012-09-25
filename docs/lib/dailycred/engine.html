@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>engine.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../dailycred.html">dailycred.rb</a>
+          <a class="source" href="acts_as_dailycred.html">acts_as_dailycred.rb</a>
+          <a class="source" href="client.html">client.rb</a>
+          <a class="source" href="engine.html">engine.rb</a>
+          <a class="source" href="helper.html">helper.rb</a>
+          <a class="source" href="middleware.html">middleware.rb</a>
+          <a class="source" href="tests_helper.html">tests_helper.rb</a>
+          <a class="source" href="user.html">user.rb</a>
+          <a class="source" href="../generators/dailycred_generator.html">dailycred_generator.rb</a>
+          <a class="source" href="../generators/templates/migration_create_user.html">migration_create_user.rb</a>
+          <a class="source" href="../generators/templates/omniauth.html">omniauth.rb</a>
+          <a class="source" href="../generators/templates/sessions_controller.html">sessions_controller.rb</a>
+          <a class="source" href="../generators/templates/user.html">user.rb</a>
+          <a class="source" href="../omniauth/strategies/dailycred.html">dailycred.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>engine.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;rails&#39;</span>
+<span class="k">module</span> <span class="nn">Dailycred</span>
+
+  <span class="k">class</span> <span class="nc">Engine</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Engine</span>
+
+    <span class="n">initializer</span> <span class="s1">&#39;dailycred.setup&#39;</span><span class="p">,</span> <span class="ss">:after</span><span class="o">=&gt;</span><span class="s2">&quot;dailycred&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+      <span class="n">conf</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="c1"># alias for configuration</span>
+      <span class="k">if</span> <span class="n">conf</span><span class="o">.</span><span class="n">respond_to?</span> <span class="s1">&#39;DAILYCRED_CLIENT_ID&#39;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">DAILYCRED_CLIENT_ID</span>
+        <span class="n">secret</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">DAILYCRED_SECRET_KEY</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>setup omniauth options, can be overridden. ex:
+Rails.application.DAILYCRED<em>OPTIONS = {
+  :client</em>options =&gt; {
+    :site =&gt; &lsquo;https://www.dailycred.com&rsquo;,
+    :authorize<em>url =&gt; &lsquo;/connect&rsquo;,
+    :token</em>url =&gt; &lsquo;/oauth/access_token&rsquo;
+  }
+}</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">if</span> <span class="n">conf</span><span class="o">.</span><span class="n">respond_to?</span> <span class="s1">&#39;DAILYCRED_OPTIONS&#39;</span>
+          <span class="n">opts</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">DAILYCRED_OPTIONS</span>
+          <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
+          <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:ssl</span><span class="o">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span>
+          <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:client_options</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:ssl</span> <span class="o">=&gt;</span> <span class="p">{}}}</span>
+          <span class="n">conf</span><span class="o">.</span><span class="n">DAILYCRED_OPTIONS</span> <span class="o">=</span> <span class="n">opts</span>
+        <span class="k">end</span>
+
+        <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="s1">&#39;/etc/ssl/certs&#39;</span><span class="p">)</span>
+          <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:ssl</span><span class="o">][</span><span class="ss">:ca_path</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;/etc/ssl/certs&#39;</span>
+        <span class="k">end</span>
+        <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="s1">&#39;/opt/local/share/curl/curl-ca-bundle.crt&#39;</span><span class="p">)</span>
+          <span class="n">opts</span><span class="o">[</span><span class="ss">:client_options</span><span class="o">][</span><span class="ss">:ssl</span><span class="o">][</span><span class="ss">:ca_file</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;/opt/local/share/curl/curl-ca-bundle.crt&#39;</span>
+        <span class="k">end</span>
+
+        <span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
+          <span class="n">provider</span> <span class="ss">:dailycred</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">secret</span><span class="p">,</span> <span class="n">opts</span>
+        <span class="k">end</span>
+
+        <span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="s2">&quot;Dailycred::Middleware&quot;</span><span class="p">,</span> <span class="nb">id</span>
+
+        <span class="no">ActiveSupport</span><span class="o">.</span><span class="n">on_load</span><span class="p">(</span><span class="ss">:action_controller</span><span class="p">)</span> <span class="k">do</span>
+          <span class="kp">include</span> <span class="no">Dailycred</span><span class="o">::</span><span class="no">Helpers</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+
+  <span class="k">end</span>
+
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

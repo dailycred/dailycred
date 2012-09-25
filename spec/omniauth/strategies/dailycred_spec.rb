@@ -1,4 +1,4 @@
-# require 'helper_spec'
+require_relative '../../helper_spec.rb'
 require 'omniauth'
 require 'dailycred'
 describe OmniAuth::Strategies::Dailycred do
@@ -23,7 +23,7 @@ describe OmniAuth::Strategies::Dailycred do
         subject.client.site.should eq("https://www.dailycred.com")
       end
       it 'should have the correct authorization url' do
-        subject.client.options[:authorize_url].should eq("/connect")
+        subject.client.options[:authorize_url].should eq("/oauth/authorize")
       end
 
       it 'should have the correct token url' do

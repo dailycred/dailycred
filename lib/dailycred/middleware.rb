@@ -1,4 +1,4 @@
-class Dailycred
+module Dailycred
   class Middleware
     attr_accessor :client_id
 
@@ -33,36 +33,34 @@ class Dailycred
     private
 
     def render_dailycred_scripts
-      <<-EOT
+      str =<<-EOT
       <!-- dailycred -->
       <script type="text/javascript">
       (function() {
-        var dc, dlh, home, id, page, referrer, title, url;
+        var dc, url;
         window.dc_opts = {
           clientId: "#{@client_id}",
           home: "#{@opts[:url]}"
         };
-        id = dc_opts.clientId;
-        home = window.dc_opts.home || "https://www.dailycred.com";
-        dlh = document.location.href;
-        page = encodeURIComponent(dlh);
-        title = document.title ? document.title : "";
-        referrer = document.referrer ? encodeURIComponent(document.referrer) : "";
-        dc = document.createElement("img");
-        url = "" + home + "/dc.gif?url=" + page + "&title=" + title + "&client_id=" + window.dc_opts.clientId + "&referrer=" + referrer;
+        dc = document.createElement("script");
+        url = dc_opts.home + "/public/js/cred.coffee";
         dc.src = url;
         document.body.appendChild(dc);
       }).call(this);
       </script>
-      #{'<!--' unless @opts[:sdk]}<script src="#{@opts[:url]}/public/js/dailycred.coffee"></script>
+      EOT
+      str2 =<<-EOT
+      <script src="#{@opts[:url]}/public/js/dailycred.coffee"></script>
       <script>
       DC.init({
           "showModal" : #{@opts[:modal]}
           #{',"modal":{"triggers":'+@opts[:triggers].to_s+'}' if @opts[:modal]}
         });
-      </script>#{'-->' unless @opts[:sdk]}
-      <!-- end dailycred -->
+      </script>
       EOT
+      str += str2 if @opts[:sdk]
+      str += "\n<!-- end dailycred -->"
+      str
     end
 
   end

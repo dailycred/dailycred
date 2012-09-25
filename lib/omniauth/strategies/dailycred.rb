@@ -12,7 +12,7 @@ module OmniAuth
       # default options
       option :client_options, {
         :site => "https://www.dailycred.com",
-        :authorize_url => '/connect',
+        :authorize_url => '/oauth/authorize',
         :token_url => '/oauth/access_token'
       }
 
@@ -41,6 +41,7 @@ module OmniAuth
 
       # this step allows auth_params to be added to the url
       def request_phase
+        p session['omniauth.state']
         OmniAuth::Strategies::Dailycred::AUTH_PARAMS.each do |param|
           val = session['omniauth.params'][param]
           if val && !val.empty?
@@ -66,10 +67,10 @@ module OmniAuth
         OmniAuth::Strategies::Dailycred::ATTRIBUTES.each do |attr|
           @duser[attr] = json[attr]
         end
-        if !json["FACEBOOK"].nil?
-          @duser['facebook'] = json["FACEBOOK"]["members"]
-          @duser['facebook']['access_token'] = json["FACEBOOK"]['access_token']
-        end
+        json["identities"].each do |k, v|
+          @duser[k] = v
+          @duser[k][:access_token] = json["access_tokens"][k]
+        end if !json["identities"].nil?
         # pp @duser
 
         @duser

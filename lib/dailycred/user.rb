@@ -1,5 +1,5 @@
-class Dailycred
-  class Auth
+module Dailycred
+  class User
     include ActiveModel::Validations
     include ActiveModel::Serialization
 

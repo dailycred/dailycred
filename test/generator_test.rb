@@ -31,10 +31,6 @@ class GeneratorTest < Rails::Generators::TestCase
     File.open("#{RAILS_ROOT}/app/controllers/application_controller.rb", 'w') do |f|
       f.puts "class ApplicationController < ActionController::Base\n\nend"
     end
-    Dir.mkdir("#{RAILS_ROOT}/app/helpers")
-    File.open("#{RAILS_ROOT}/app/helpers/application_helper.rb", 'w') do |f|
-      f.puts "module ApplicationHelper\n\nend"
-    end
   end
 
   teardown do
@@ -59,44 +55,17 @@ class GeneratorTest < Rails::Generators::TestCase
   def test_generator args=[]
     run_generator args
     assert_file "config/initializers/omniauth.rb" do |config|
-      assert_true config.include? "Rails.application.config.middleware.use"
-      # assert_true config.include? 'Rails.configuration.DAILYCRED_CLIENT_ID = "YOUR_CLIENT_ID"'
-      # assert_true config.include? 'Rails.configuration.DAILYCRED_SECRET_KEY = "YOUR_SECRET_KEY"'
+      assert_true config.include? 'Rails.configuration.DAILYCRED_CLIENT_ID ='
+      assert_true config.include? 'Rails.configuration.DAILYCRED_SECRET_KEY ='
     end
 
-    assert_file "config/routes.rb", /(#{Regexp.escape('match "/auth/:provider/callback" => "sessions#create"')})/
-    assert_file "config/routes.rb", /(#{Regexp.escape('match "/logout" => "sessions#destroy", :as => :logout')})/
-    assert_file "config/routes.rb", /(#{Regexp.escape('match "/auth" => "sessions#info", :as => :auth')})/
-    assert_file "config/routes.rb", /(#{Regexp.escape('match "/auth/dailycred", :as => :login')})/
-    assert_file "config/routes.rb", /(#{Regexp.escape('match "/auth/failure" => "sessions#failure"')})/
+    assert_file "config/routes.rb", /(#{Regexp.escape("mount Dailycred::Engine => '/auth', :as => 'dailycred_engine'")})/
 
-    assert_file "app/controllers/sessions_controller.rb" do |controller|
-      assert_instance_method :create, controller
-      assert_instance_method :destroy, controller
-      assert_instance_method :failure, controller
-      assert_instance_method :info, controller
+    assert_file "app/models/user.rb" do |model|
+      assert_true model.include? "acts_as_dailycred"
     end
 
     assert_file "app/controllers/application_controller.rb" do |controller|
-      assert_instance_method :current_user, controller
-      assert_instance_method :set_state, controller
-      assert_instance_method :authenticate, controller
-      assert_instance_method :dailycred, controller
-    end
-
-    assert_file "app/helpers/application_helper.rb" do |helper|
-      assert_instance_method :connect_path, helper
-    end
-
-    assert_file "app/models/user.rb" do |model|
-      # assert_true model.include? "attr_accessible :email, :username, :created, :verified, :admin, :referred_by, :referred, :facebook, :tags, :provider, :uid, :token"
-      assert_class_method :find_or_create_with_omniauth, model
-      assert_true model.include? "serialize :facebook, Hash"
-      assert_true model.include? "serialize :tags, Array"
-      assert_true model.include? "serialize :referred, Array"
-      assert_true model.include? "serialize :twitter, Hash"
-      assert_true model.include? "serialize :google, Hash"
-      assert_true model.include? "serialize :github, Hash"
     end
 
     assert_migration "db/migrate/create_users.rb" do |migration|
