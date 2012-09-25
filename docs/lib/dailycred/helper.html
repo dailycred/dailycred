@@ -60,7 +60,7 @@ example:
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">authenticate</span>
-      <span class="n">redirect_to_auth</span>  <span class="k">unless</span> <span class="n">current_user</span>
+      <span class="n">redirect_to_unauth</span> <span class="k">unless</span> <span class="n">current_user</span>
     <span class="k">end</span></pre></div>
       </td>
     </tr>
@@ -103,6 +103,12 @@ make sure we have the correct state passed back and forth</p>
     <span class="k">def</span> <span class="nf">redirect_to_auth</span> <span class="n">opts</span><span class="o">=</span><span class="p">{}</span>
       <span class="n">conf</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">DAILYCRED_OPTIONS</span>
       <span class="n">path</span> <span class="o">=</span> <span class="o">!</span><span class="n">conf</span><span class="o">[</span><span class="ss">:after_auth</span><span class="o">].</span><span class="n">nil?</span> <span class="p">?</span> <span class="n">conf</span><span class="o">[</span><span class="ss">:after_auth</span><span class="o">]</span> <span class="p">:</span> <span class="n">dailycred_engine</span><span class="o">.</span><span class="n">auth_info_path</span>
+      <span class="n">redirect_to</span> <span class="n">path</span><span class="p">,</span> <span class="n">opts</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">redirect_to_unauth</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">conf</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">DAILYCRED_OPTIONS</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="o">!</span><span class="n">conf</span><span class="o">[</span><span class="ss">:after_unauth</span><span class="o">].</span><span class="n">nil?</span> <span class="p">?</span> <span class="n">conf</span><span class="o">[</span><span class="ss">:after_unauth</span><span class="o">]</span> <span class="p">:</span> <span class="n">dailycred_engine</span><span class="o">.</span><span class="n">auth_info_path</span>
       <span class="n">redirect_to</span> <span class="n">path</span><span class="p">,</span> <span class="n">opts</span>
     <span class="k">end</span>
 
