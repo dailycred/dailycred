@@ -55,7 +55,7 @@ describe Dailycred::Client do
   end
 
   it "resets a password" do
-    json = json_response @dc.passReset("useruseruseruser@gmail.com")
+    json = json_response @dc.reset_password("useruseruseruser@gmail.com")
     json["worked"].should == true
   end
 

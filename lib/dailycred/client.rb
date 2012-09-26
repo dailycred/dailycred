@@ -61,7 +61,7 @@ module Dailycred
     # Send a reset password email
     #
     # - @param [string] user the user's email or username
-    def passReset(user)
+    def reset_password(user)
       opts = {
         :user => user
       }
@@ -85,6 +85,8 @@ module Dailycred
       opts = {}
       if @options[:client_options] && @options[:client_options][:ssl]
         opts[:ssl] = @options[:client_options][:ssl]
+      elsif Rails.configuration.respond_to? "DAILYCRED_OPTIONS"
+        opts[:ssl] = Rails.configuration.DAILYCRED_OPTIONS[:client_options][:ssl]
       end
       opts
     end

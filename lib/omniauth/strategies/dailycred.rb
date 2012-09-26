@@ -16,9 +16,6 @@ module OmniAuth
         :token_url => '/oauth/access_token'
       }
 
-      # parameters to expect and return from dailycred responses
-      ATTRIBUTES = ["email", "username", "created", "verified", "admin", "referred_by", "tags", "referred"]
-
       # allows parameters to be passed through
       AUTH_PARAMS = ["action","identity_provider","referrer"]
 
@@ -64,8 +61,8 @@ module OmniAuth
         @duser = {'token' => access_token.token}
         @duser['provider'] = 'dailycred'
         @duser['uid'] =  json['id'] || json['user_id']
-        OmniAuth::Strategies::Dailycred::ATTRIBUTES.each do |attr|
-          @duser[attr] = json[attr]
+        json.each do |k,v|
+          @duser[k] = v
         end
         json["identities"].each do |k, v|
           @duser[k] = v

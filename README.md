@@ -4,7 +4,6 @@
 
 The Dailycred ruby gem is everything you need to get off the ground running with robust authentication. It includes an [omniauth](https://github.com/intridea/omniauth) provider and a generator to create necessary models and controllers. The generated authentication structure is inspired by [nifty-generators](https://github.com/ryanb/nifty-generators). To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your gemfile:
 
-
     gem 'dailycred'
 
 Make sure you've signed up for Dailycred, and head over to your [settings](https://www.dailycred.com/admin/settings) page to get your API keys. Once you've done that, head back to the command line and run:
@@ -77,7 +76,30 @@ To logout a user, simply send them to `/auth/logout`.
     <%= link_to 'logout', logout_path %>
     # => <a href="/auth/logout">logout</a>
 
-## Dailycred API
+#### Tagging a User
+
+Dailycred provides the ability to 'tag' users, whether for reference in analytics or any other reason. Note that this is a very simple 'tagging' system, and not something you should use for dynamic tagging situations in your application.
+
+    @user.tag 'awesome'
+    @user.untag 'awesome'
+
+#### Firing Events
+
+You can also fire events tied to a specific user - this is helpful for goal tracking and tying actions to a specific user in analytics. We already fire many events for when a user signs up, resets a password, and much more, but you can also use the event system for something more specific for your application.
+
+    # user#fire_event(key, value)
+    @user.fire_event 'task added', @task.name
+
+#### Testing Controllers
+
+Testing controllers that have the `authenticate` before filter is easy:
+
+    # with mocha
+    @controller.expects(:current_user).returns(@user)
+
+See `dummy/test/functional/post_controller_test.rb` for an example.
+
+#### Dailycred API
 
 For reference, have a look at the [annotated source code.](https://www.dailycred.com/public/docs/ruby/lib/dailycred.html)
 

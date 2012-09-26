@@ -16,7 +16,7 @@ class DailycredGenerator < Rails::Generators::Base
   EOS
 
   APP_CONTROLLER_LINES =<<-EOS
-  helper_method :current_user, :login_path, :dailycred, :signup_path
+  helper_method :current_user
 
   private
 

@@ -23,7 +23,6 @@ module Dailycred
           opts[:client_options][:ssl] = {}
         else
           opts = {:client_options => {:ssl => {}}}
-          conf.DAILYCRED_OPTIONS = opts
         end
 
         if File.exists?('/etc/ssl/certs')
@@ -32,6 +31,8 @@ module Dailycred
         if File.exists?('/opt/local/share/curl/curl-ca-bundle.crt')
           opts[:client_options][:ssl][:ca_file] = '/opt/local/share/curl/curl-ca-bundle.crt'
         end
+
+        conf.DAILYCRED_OPTIONS = opts
 
         Rails.application.config.middleware.use OmniAuth::Builder do
           provider :dailycred, id, secret, opts
