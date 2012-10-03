@@ -28,6 +28,23 @@ module Dailycred
       "/auth/dailycred"
     end
 
+    def connect_path(params)
+      url = "#{request.protocol}#{request.host_with_port}/auth/dailycred"
+      p = []
+      params.each do |k,v|
+        p << "#{k}=#{v.to_s}"
+      end
+      url += "?" if p.size > 0
+      url += p.join("&")
+    end
+
+    def connect_user provider, user=nil
+      if user.nil?
+        user = current_user
+      end
+      connect_path(access_token: user.token, identity_provider: provider)
+    end
+
     def redirect_to_auth opts={}
       conf = Rails.configuration.DAILYCRED_OPTIONS
       path = !conf[:after_auth].nil? ? conf[:after_auth] : dailycred_engine.auth_info_path
@@ -42,7 +59,7 @@ module Dailycred
 
 
     ActiveSupport.on_load(:action_controller) do
-      helper_method :current_user, :login_path, :set_state, :dailycred, :authenticate
+      helper_method :current_user, :login_path, :set_state, :dailycred, :authenticate, :redirect_to_auth, :redirect_to_unauth
     end
   end
 end

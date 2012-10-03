@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   before_filter :authenticate, :only => [:destroy]
   before_filter :current_user
+  include Dailycred::Helpers
 
   # Callback Route for OAuth flow
   def create

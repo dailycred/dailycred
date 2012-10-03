@@ -41,7 +41,7 @@ module Dailycred
         Rails.application.config.middleware.use "Dailycred::Middleware", id
 
         ActiveSupport.on_load(:action_controller) do
-          include Dailycred::Helpers
+          helper Dailycred::Helpers
         end
       end
     end

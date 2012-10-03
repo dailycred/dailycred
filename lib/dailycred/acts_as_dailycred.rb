@@ -6,9 +6,11 @@ module ActsAsDailycred
     serialize :github, Hash
     serialize :tags, Array
     serialize :referred, Array
+    serialize :access_tokens, Hash
 
     extend ActsAsDailycred::SingletonMethods
     include ActsAsDailycred::InstanceMethods
+    include Dailycred::Helpers
   end
   module SingletonMethods
     def find_or_create_with_omniauth(model)

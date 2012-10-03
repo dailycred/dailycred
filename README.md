@@ -28,11 +28,84 @@ While this is enough to get off the ground running with user authentication, thi
 
 ## Authenticating
 
+#### login_path
+
+A helper for linking to the authentication url.
+
+    <%= link_to 'sign up', login_path %>
+    # => <a href="/auth/dailycred">sign up</a>
+
+#### logout_path
+
+To logout a user, simply send them to `/auth/logout`.
+
+    <%= link_to 'logout', logout_path %>
+    # => <a href="/auth/logout">logout</a>
+    
+#### authenticate
+
 To protect a controller method from unauthorized users, use the 'authorize' helper method as a `before_filter`.
 
     #before_filter :authenticate, :except => [:index] #don't authenticate some
     #before_filter :authenticate, :only => [:create, :new] #only authenticate some
     before_filter :authenticate #all methods
+
+## Social Connect
+
+To use a social sign-in service instead of email, and password, use `connect_path.`
+
+    <%= link_to 'sign in with facebook', connect_path(:identity_provider => :facebook) %>
+
+The `identity_provider` can be one of `facebook`, `google`, or `twitter.`
+
+After a user has social connected, their social data is serialized into individual fields in the user model. The serialized object is the exact same as what the social provider's graph response returns. For example:
+
+    p current_user.facebook
+    # =>
+    {
+        "video_upload_limits" => {
+            "length" => 1200.0,
+            "size" => 1073741824.0
+        },
+        "locale" => "en_US",
+        "link" => "http://www.facebook.com/joe.smith",
+        "updated_time" => "2012-09-27T19:04:38+0000",
+        "currency" => {
+            "user_currency" => "USD",
+            "currency_exchange" => 10.0,
+            "currency_exchange_inverse" => 0.1,
+            "currency_offset" => 100.0
+        },
+        "picture" => {
+            "data" => {
+                "url" => "http://profile.ak.fbcdn.net/hprofile-ak-ash4/370570_1039690812_2022945351_q.jpg",
+                "is_silhouette" => false
+            }
+        },
+        "id" => "1092609812",
+        "third_party_id" => "cBLDKnqlfYlReV7Jo4yRAFB1a4I",
+        "first_name" => "Joe",
+        "username" => "jsmitty",
+        "bio" => "shred the gnar.",
+        "email" => "jsmitty@dailycred.com",
+        "verified" => true,
+        "name" => "Joe Smith",
+        "last_name" => "Stoever",
+        "gender" => "male",
+        "access_token" =>"AAAFHsZAi9ddUBAKPMOKPDrmJlclwCoVHCfwflF5ZCyLZC70SOo0MPvj62lhHZAnV6jk8DEfBSjLtfcyC7Bx25a9CLphzoayv3EtvbE2tAQZDZD"
+    }
+
+You can also connect additional social accounts to an existing user:
+
+    <%= link_to 'connect with facebook', connect_user(:facebook) %>
+
+`connect_user` defaults to connecting the `current_user`, but you can explicitly connect any user:
+
+    <%= link_to 'connect with google', connect_user(:google, @user) %>
+
+---
+
+##Helpers
 
 There are a few other helper methods available:
 
@@ -61,20 +134,6 @@ or just as a helper
     def index
         dailycred.event(current_user.uid, "New Task", @task.name)
     end
-
-#### login_path
-
-A helper for linking to the authentication url. Usage:
-
-    <%= link_to 'sign up', login_path %>
-    # => <a href="/auth/dailycred">sign up</a>
-
-#### Logging out
-
-To logout a user, simply send them to `/auth/logout`.
-
-    <%= link_to 'logout', logout_path %>
-    # => <a href="/auth/logout">logout</a>
 
 #### Tagging a User
 

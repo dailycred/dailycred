@@ -1,4 +1,4 @@
-class CreateUsers < ActiveRecord::Migration
+class UpdateUsers2 < ActiveRecord::Migration
   def self.up
     if !table_exists? :users
       create_table :users do |t|

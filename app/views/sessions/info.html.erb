@@ -1,6 +1,7 @@
 <% if current_user %>
   <p>Hello <%= current_user.email %> <br>
     <%= link_to 'Logout', dailycred_engine.logout_path %>
+    <br><%= link_to 'connect with facebook', connect_user(:facebook) %>
   </p>
 <% else %>
   <%= link_to 'Log In', login_path() %>

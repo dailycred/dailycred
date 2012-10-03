@@ -17,7 +17,7 @@ module OmniAuth
       }
 
       # allows parameters to be passed through
-      AUTH_PARAMS = ["action","identity_provider","referrer"]
+      AUTH_PARAMS = ["action","identity_provider","referrer", "access_token"]
 
       option :authorize_options, OmniAuth::Strategies::Dailycred::AUTH_PARAMS
 
