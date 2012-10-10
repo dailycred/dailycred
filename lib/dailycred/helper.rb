@@ -56,10 +56,5 @@ module Dailycred
       path = !conf[:after_unauth].nil? ? conf[:after_unauth] : dailycred_engine.auth_info_path
       redirect_to path, opts
     end
-
-
-    ActiveSupport.on_load(:action_controller) do
-      helper_method :current_user, :login_path, :set_state, :dailycred, :authenticate, :redirect_to_auth, :redirect_to_unauth
-    end
   end
 end

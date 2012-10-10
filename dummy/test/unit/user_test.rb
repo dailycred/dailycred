@@ -58,6 +58,11 @@ class UserTest < ActiveSupport::TestCase
     assert_true json_response(@user.fire_event 'got tested')['worked']
   end
 
+  test 'making a referral link' do
+    id = @user.uid
+    assert_equal @user.referral_link('http://me.com'), "https://www.dailycred.com/r/#{id}?redirect_uri=http://me.com"
+  end
+
   def json_response response
     JSON.parse response.body
   end

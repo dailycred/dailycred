@@ -40,13 +40,32 @@ module ActsAsDailycred
       end
     end
 
+    def display_name
+      display = self.email || ""
+      p '1'
+      if self.facebook != {}
+        p '2'
+        return self.facebook["name"]
+      elsif self.google != {}
+        p '3'
+        return self.google["name"]
+      elsif self.twitter != {}
+        p '4'
+        return "@"+self.twitter["screen_name"]
+      end
+      display
+    end
+
+    def referral_link url
+      "https://www.dailycred.com/r/#{self.uid}?redirect_uri=#{url}"
+    end
     def reset_password
       get_client.reset_password self.email
     end
 
     def update_from_dailycred dc
       dc.each do |k,v|
-        self[k] = v if self[k] != v
+        self[k] = v if self.respond_to?(k)
       end
       save!
     end
@@ -57,6 +76,10 @@ module ActsAsDailycred
 
     def get_client
       @dailycred ||= Dailycred::Client.new Rails.configuration.DAILYCRED_CLIENT_ID, Rails.configuration.DAILYCRED_SECRET_KEY
+    end
+
+    def connect_path provider
+      "/auth/dailycred?identity_provider=#{provider.to_s}"
     end
   end
 end

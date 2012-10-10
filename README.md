@@ -149,6 +149,12 @@ You can also fire events tied to a specific user - this is helpful for goal trac
     # user#fire_event(key, value)
     @user.fire_event 'task added', @task.name
 
+#### Building Referral URLs
+
+To easily build referral URLs to track sharing amongst your users, use `referral_link(my_site)`, where *my_site* is the url that you wish referred users to be sent to.
+
+    current_user.referral_link("http://www.mysite.com")
+
 #### Testing Controllers
 
 Testing controllers that have the `authenticate` before filter is easy:

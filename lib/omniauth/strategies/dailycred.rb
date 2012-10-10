@@ -12,7 +12,7 @@ module OmniAuth
       # default options
       option :client_options, {
         :site => "https://www.dailycred.com",
-        :authorize_url => '/oauth/authorize',
+        :authorize_url => '/connect',
         :token_url => '/oauth/access_token'
       }
 
@@ -57,7 +57,7 @@ module OmniAuth
         connection = Faraday::Connection.new options.client_options[:site], :ssl => options.client_options[:ssl]
         response = connection.get("/graph/me.json?access_token=#{access_token.token}")
         json = JSON.parse(response.body)
-        # pp json
+        pp json if options[:verbose]
         @duser = {'token' => access_token.token}
         @duser['provider'] = 'dailycred'
         @duser['uid'] =  json['id'] || json['user_id']
@@ -68,7 +68,8 @@ module OmniAuth
           @duser[k] = v
           @duser[k][:access_token] = json["access_tokens"][k]
         end if !json["identities"].nil?
-        # pp @duser
+        pp @duser if options[:verbose]
+        @duser.delete("id")
 
         @duser
       end

@@ -6,8 +6,8 @@ Rails.configuration.DAILYCRED_SECRET_KEY = "a1c21e72-98d8-47c2-9e9a-1e2dcd363b2f
 Rails.configuration.DAILYCRED_OPTIONS = {
   :client_options => {
     :site => 'http://ec2-72-44-40-55.compute-1.amazonaws.com:9000',
-    :authorize_url => "oauth/gateway"
-  },
+    :verbose => true
+  }
   # :after_auth => '/hello', #after login
   # :after_unauth => '/goodbye' #after logout
 }

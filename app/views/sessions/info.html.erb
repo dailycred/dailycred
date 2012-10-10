@@ -2,7 +2,12 @@
   <p>Hello <%= current_user.email %> <br>
     <%= link_to 'Logout', dailycred_engine.logout_path %>
     <br><%= link_to 'connect with facebook', connect_user(:facebook) %>
+    <br><%= link_to 'connect with google', connect_user(:google) %>
+    <br><%= link_to 'connect with twitter', connect_user(:twitter) %>
   </p>
 <% else %>
   <%= link_to 'Log In', login_path() %>
+  <br><%= link_to 'connect with facebook', connect_path(:identity_provider => :facebook) %>
+  <br><%= link_to 'connect with google', connect_path(:identity_provider => :google) %>
+  <br><%= link_to 'connect with twitter', current_user.connect_path(:twitter) %>
 <% end %>
