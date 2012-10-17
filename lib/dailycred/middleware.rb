@@ -50,7 +50,7 @@ module Dailycred
       </script>
       EOT
       str2 =<<-EOT
-      <script src="#{@opts[:url]}/public/js/dailycred/dailycred.coffee"></script>
+      <script src="https://s3.amazonaws.com/file.dailycred.com/js/dailycred.js"></script>
       <script>
       DC.init({
           "showModal" : #{@opts[:modal]}
