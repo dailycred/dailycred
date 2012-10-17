@@ -64,8 +64,9 @@ module ActsAsDailycred
     end
 
     def update_from_dailycred dc
+      bad = ['updated_at', 'created_at']
       dc.each do |k,v|
-        self[k] = v if self.respond_to?(k)
+        self[k] = v if self.respond_to?(k) and !bad.contains?(k.to_s)
       end
       save!
     end
