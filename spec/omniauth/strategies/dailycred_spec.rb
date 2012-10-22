@@ -23,7 +23,7 @@ describe OmniAuth::Strategies::Dailycred do
         subject.client.site.should eq("https://www.dailycred.com")
       end
       it 'should have the correct authorization url' do
-        subject.client.options[:authorize_url].should eq("/oauth/authorize")
+        subject.client.options[:authorize_url].should eq("/connect")
       end
 
       it 'should have the correct token url' do

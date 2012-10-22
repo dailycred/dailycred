@@ -42,15 +42,11 @@ module ActsAsDailycred
 
     def display_name
       display = self.email || ""
-      p '1'
       if self.facebook != {}
-        p '2'
         return self.facebook["name"]
       elsif self.google != {}
-        p '3'
         return self.google["name"]
       elsif self.twitter != {}
-        p '4'
         return "@"+self.twitter["screen_name"]
       end
       display
@@ -65,6 +61,7 @@ module ActsAsDailycred
 
     def update_from_dailycred dc
       bad = ['updated_at', 'created_at']
+      p dc
       dc.each do |k,v|
         self[k] = v if self.respond_to?(k) and !bad.include?(k.to_s)
       end
