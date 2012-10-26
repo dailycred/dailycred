@@ -7,6 +7,7 @@ module ActsAsDailycred
     serialize :tags, Array
     serialize :referred, Array
     serialize :access_tokens, Hash
+    serialize :idenitities, Hash
 
     extend ActsAsDailycred::SingletonMethods
     include ActsAsDailycred::InstanceMethods

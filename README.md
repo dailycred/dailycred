@@ -56,7 +56,7 @@ To use a social sign-in service instead of email, and password, use `connect_pat
 
     <%= link_to 'sign in with facebook', connect_path(:identity_provider => :facebook) %>
 
-The `identity_provider` can be one of `facebook`, `google`, or `twitter.`
+The `identity_provider` can be one of `facebook`, `google`, `twitter`, `disqus`, or `instagram`.
 
 After a user has social connected, their social data is serialized into individual fields in the user model. The serialized object is the exact same as what the social provider's graph response returns. For example:
 

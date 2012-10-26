@@ -20,6 +20,7 @@ class CreateUsers < ActiveRecord::Migration
         t.text :access_tokens
         t.boolean :subscribed
         t.string :display
+        t.text :identities
 
         t.timestamps
       end
@@ -42,6 +43,7 @@ class CreateUsers < ActiveRecord::Migration
       safe_column :users, :access_tokens, :text
       safe_column :users, :display, :string
       safe_column :users, :subscribed, :boolean
+      safe_column :users, :identities, :text
     end
   end
 
