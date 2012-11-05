@@ -15,7 +15,6 @@ module Dailycred
     def call(env)
       @env = env
       @status, @headers, @response = @app.call(env)
-
       if @headers["Content-Type"] =~ /text\/html|application\/xhtml\+xml/
         body = ""
         @response.each { |part| body << part }
@@ -41,6 +40,7 @@ module Dailycred
         window.dc_opts = {
           clientId: "#{@client_id}",
           home: "#{@opts[:url]}"
+          #{", type: \"#{@status.to_s}\"" if @status == 500 || @status == 400}
         };
         dc = document.createElement("script");
         url = dc_opts.home + "/public/js/cred.coffee";

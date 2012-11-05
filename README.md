@@ -160,7 +160,7 @@ To easily build referral URLs to track sharing amongst your users, use `referral
 Testing controllers that have the `authenticate` before filter is easy:
 
     # with mocha
-    @controller.expects(:current_user).returns(@user)
+    @controller.stubs(:current_user).returns(@user)
 
 See `dummy/test/functional/post_controller_test.rb` for an example.
 

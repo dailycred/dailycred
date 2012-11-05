@@ -72,7 +72,7 @@ class DailycredGenerator < Rails::Generators::Base
     # url = "https://www.dailycred.com"
     # url = "http://localhost:9000"
     # staging server for a very short time
-    url = "http://ec2-72-44-40-55.compute-1.amazonaws.com:9000"
+    url = "https://www.dailycred.com"
     connection = Faraday::Connection.new url, :ssl => ssl_opts
     params = {
       :login => email,
