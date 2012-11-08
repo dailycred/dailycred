@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration
         t.string :provider
         t.string :uid
         t.string :email
-        t.bigint :created
+        t.integer :created, :limit => 8
         t.string :username
         t.boolean :verified
         t.boolean :admin
