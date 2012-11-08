@@ -4,7 +4,7 @@ class PostsControllerTest < ActionController::TestCase
   setup do
     @post = posts(:one)
     @user = users(:basic)
-    @controller.expects(:current_user).returns(@user)
+    @controller.stubs(:current_user).returns(@user)
   end
 
   test "should get index" do
