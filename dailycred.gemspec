@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dailycred"
   gem.require_paths = ["lib"]
-  gem.version       = "0.1.43"
+  gem.version       = Dailycred::VERSION
 end
