@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_filter :authenticate
   # GET /posts
   # GET /posts.json
 

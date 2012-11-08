@@ -42,6 +42,7 @@ module Dailycred
 
         ActiveSupport.on_load(:action_controller) do
           include Dailycred::Helpers
+          helper Dailycred::Helpers
         end
       end
     end

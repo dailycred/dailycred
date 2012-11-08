@@ -9,6 +9,10 @@
 <body>
 
 <%= yield %>
+<%= link_to 'login', connect_path %>
+<% if !current_user.nil? %>
+  <%= debug current_user %>
+<% end %>
 
 </body>
 </html>

@@ -25,10 +25,10 @@ module Dailycred
     end
 
     def login_path(params={})
-      "/auth/dailycred"
+      connect_path params
     end
 
-    def connect_path(params)
+    def connect_path(params={})
       url = "#{request.protocol}#{request.host_with_port}/auth/dailycred"
       p = []
       params.each do |k,v|
@@ -46,6 +46,7 @@ module Dailycred
     end
 
     def redirect_to_auth opts={}
+      p 'redirecting to auth'
       conf = Rails.configuration.DAILYCRED_OPTIONS
       path = !conf[:after_auth].nil? ? conf[:after_auth] : dailycred_engine.auth_info_path
       redirect_to path, opts

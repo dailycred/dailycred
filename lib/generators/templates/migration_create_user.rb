@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration
         t.string :provider
         t.string :uid
         t.string :email
-        t.integer :created, :limit => 8
+        t.timestamp :created
         t.string :username
         t.boolean :verified
         t.boolean :admin
@@ -28,7 +28,7 @@ class CreateUsers < ActiveRecord::Migration
       safe_column :users, :provider, :string
       safe_column :users, :uid, :string
       safe_column :users, :email, :string
-      safe_column :users, :created, :integer
+      safe_column :users, :created, :timestamp
       safe_column :users, :username, :string
       safe_column :users, :verified, :booleanied
       safe_column :users, :admin, :boolean
