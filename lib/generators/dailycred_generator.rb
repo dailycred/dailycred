@@ -34,9 +34,7 @@ class DailycredGenerator < Rails::Generators::Base
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
     # get client info from login if they didnt specify info
-    if @client_id == CLIENT_ID_DEFAULT
-      get_info
-    end
+    puts "Please manually configure your API keys in config/initializers/omniauth.rb"
     # application controller
     insert_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
     # add user_model
