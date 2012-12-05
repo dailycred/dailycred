@@ -1,4 +1,5 @@
 require 'rails/generators'
+require 'test/unit'
 # require 'mocha'
 require_relative "../lib/generators/dailycred_generator.rb"
 class GeneratorTest < Rails::Generators::TestCase
@@ -44,41 +45,41 @@ class GeneratorTest < Rails::Generators::TestCase
     assert_credentials "aaa", "bbb"
   end
 
-  test "generator works with login" do
-    generator_class.any_instance.stubs(:get_input).returns(["localtest@dailycred.com","password"])
-    test_generator
-    assert_credentials "e92e20bf-e0a4-49b4-8a82-ff1b65d80017", "9adf81a8-ce97-4bcb-9c1f-c09f5fc7b6b8-0d1a4553-496d-450e-80fd-9e8d0552a920"
-  end
+  # test "generator works with login" do
+  #   generator_class.any_instance.stubs(:get_input).returns(["localtest@dailycred.com","password"])
+  #   test_generator
+  #   assert_credentials "e92e20bf-e0a4-49b4-8a82-ff1b65d80017", "9adf81a8-ce97-4bcb-9c1f-c09f5fc7b6b8-0d1a4553-496d-450e-80fd-9e8d0552a920"
+  # end
 
   private
 
   def test_generator args=[]
     run_generator args
     assert_file "config/initializers/omniauth.rb" do |config|
-      assert_true config.include? 'Rails.configuration.DAILYCRED_CLIENT_ID ='
-      assert_true config.include? 'Rails.configuration.DAILYCRED_SECRET_KEY ='
+      assert config.include? 'Rails.configuration.DAILYCRED_CLIENT_ID ='
+      assert config.include? 'Rails.configuration.DAILYCRED_SECRET_KEY ='
     end
 
     assert_file "config/routes.rb", /(#{Regexp.escape("mount Dailycred::Engine => '/auth', :as => 'dailycred_engine'")})/
 
     assert_file "app/models/user.rb" do |model|
-      assert_true model.include? "acts_as_dailycred"
+      assert model.include? "acts_as_dailycred"
     end
 
     assert_file "app/controllers/application_controller.rb" do |controller|
     end
 
     assert_migration "db/migrate/create_users.rb" do |migration|
-      assert_true migration.include? ":twitter"
-      assert_true migration.include? ":github"
-      assert_true migration.include? ":google"
+      assert migration.include? ":twitter"
+      assert migration.include? ":github"
+      assert migration.include? ":google"
     end
   end
 
   def assert_credentials client_id, client_secret
     assert_file "config/initializers/omniauth.rb" do |config|
-      assert_true config.include? "Rails.configuration.DAILYCRED_CLIENT_ID = \"#{client_id}\""
-      assert_true config.include? "Rails.configuration.DAILYCRED_SECRET_KEY = \"#{client_secret}\""
+      assert config.include? "Rails.configuration.DAILYCRED_CLIENT_ID = \"#{client_id}\""
+      assert config.include? "Rails.configuration.DAILYCRED_SECRET_KEY = \"#{client_secret}\""
     end
   end
 

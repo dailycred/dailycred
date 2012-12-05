@@ -9,7 +9,7 @@ require 'dailycred'
 
 Dir[File.expand_path('../support/**/*', __FILE__)].each { |f| require f }
 
-# require 'omniauth/strategies/dailycred_spec'
+require 'omniauth/strategies/dailycred_spec'
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
