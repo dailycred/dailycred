@@ -42,7 +42,7 @@ module Dailycred
       if user.nil?
         user = current_user
       end
-      connect_path(access_token: user.token, identity_provider: provider)
+      connect_path(:access_token => user.token, :identity_provider => provider)
     end
 
     def redirect_to_auth opts={}
