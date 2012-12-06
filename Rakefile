@@ -19,24 +19,25 @@ end
 
 task :default => :travis
 
-# desc 'docs'
-#   begin
-#     require 'rocco'
-#     require 'rocco/tasks'
-#     require 'fileutils'
-#     require 'maruku'
-#     Rocco::make 'docs/'
-#     FileUtils.cp_r "docs/lib/", "/Users/hank/rails/dailycred/public/docs/ruby/", :verbose => true
-#     md = ""
-#     File.open("README.md", "r") do |infile|
-#       while (line = infile.gets)
-#         md += line
-#       end
-#     end
-#     doc = Maruku.new(md)
-#     File.open("/Users/hank/rails/dailycred/app/views/tags/ruby.html", 'w') {|f| f.write doc.to_html}
-#   rescue LoadError
-#     warn "#$! -- rocco tasks not loaded."
-#     task :rocco
-#   end
-# end
+desc 'docs'
+task :docs do
+  begin
+    require 'rocco'
+    require 'rocco/tasks'
+    require 'fileutils'
+    require 'maruku'
+    Rocco::make 'docs/'
+    FileUtils.cp_r "docs/lib/", "/Users/hank/rails/dailycred/public/docs/ruby/", :verbose => true
+    md = ""
+    File.open("README.md", "r") do |infile|
+      while (line = infile.gets)
+        md += line
+      end
+    end
+    doc = Maruku.new(md)
+    File.open("/Users/hank/rails/dailycred/app/views/tags/ruby.html", 'w') {|f| f.write doc.to_html}
+  rescue LoadError
+    warn "#$! -- rocco tasks not loaded."
+    task :rocco
+  end
+end
