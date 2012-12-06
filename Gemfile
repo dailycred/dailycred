@@ -11,7 +11,7 @@ gem 'spork'
 gem 'guard'
 gem 'guard-test'
 gem 'guard-rspec'
-gem 'mocha'
+gem "mocha", '0.12.1', :require => false
 gem 'fl-rocco'
 gem 'redcarpet', '~> 1.17'
 gem 'markdown'

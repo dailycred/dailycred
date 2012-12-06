@@ -7,7 +7,7 @@ describe Dailycred::Client do
   end
 
   before(:each) do
-    site = "http://ec2-184-72-204-70.compute-1.amazonaws.com:9000/"
+    site = "https://www.dailycred.com"
     client_id = "f1fd998c-bc48-4e1b-bc88-98f9373ba60f"
     secret = "6925d89e-d04d-469e-8fc9-3782af57bc29-c2340f1e-25a0-40af-b638-7429947a6cd7"
     @user_id = "0c19c355-2a71-4c8e-805e-f7a6087ea84c"
