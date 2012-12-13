@@ -21,7 +21,7 @@ module OmniAuth
 
       option :authorize_options, OmniAuth::Strategies::Dailycred::AUTH_PARAMS
 
-      uid { user['id'] }
+      uid { user['uid'] }
 
       info do
         user

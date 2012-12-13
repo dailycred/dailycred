@@ -15,7 +15,8 @@ module ActsAsDailycred
   end
   module SingletonMethods
     def find_or_create_with_omniauth(model)
-      @user = User.find_by_provider_and_uid(model[:provider], model[:uid]) || User.new
+      ap model
+      @user = User.find_by_provider_and_uid(model['provider'], model['uid']) || User.new
       @user.update_from_dailycred model[:info]
       @user
     end
