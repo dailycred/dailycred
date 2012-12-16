@@ -9,5 +9,5 @@
   <%= link_to 'Log In', login_path() %>
   <br><%= link_to 'connect with facebook', connect_path(:identity_provider => :facebook) %>
   <br><%= link_to 'connect with google', connect_path(:identity_provider => :google) %>
-  <br><%= link_to 'connect with twitter', current_user.connect_path(:twitter) %>
+  <br><%= link_to 'connect with twitter',connect_path(:identity_provider => :twitter) %>
 <% end %>
