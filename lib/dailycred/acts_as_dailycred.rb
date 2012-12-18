@@ -11,7 +11,6 @@ module ActsAsDailycred
   end
   module SingletonMethods
     def find_or_create_with_omniauth(model)
-      ap model
       @user = User.find_by_provider_and_uid(model['provider'], model['uid']) || User.new
       @user.update_from_dailycred model[:info]
       @user
@@ -52,7 +51,6 @@ module ActsAsDailycred
 
     def update_from_dailycred dc
       bad = ['updated_at', 'created_at']
-      p dc
       dc.each do |k,v|
         self[k] = v if self.respond_to?(k) and !bad.include?(k.to_s)
       end

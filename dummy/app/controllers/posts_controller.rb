@@ -2,10 +2,10 @@ class PostsController < ApplicationController
   before_filter :authenticate
   # GET /posts
   # GET /posts.json
-
-  before_filter :authenticate
+  
   def index
     @posts = Post.all
+    ap current_user.created.utc
 
     respond_to do |format|
       format.html # index.html.erb

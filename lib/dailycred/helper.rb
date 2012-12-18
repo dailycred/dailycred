@@ -30,12 +30,12 @@ module Dailycred
 
     def connect_path(params={})
       url = "#{request.protocol}#{request.host_with_port}/auth/dailycred"
-      p = []
+      params_array = []
       params.each do |k,v|
-        p << "#{k}=#{v.to_s}"
+        params_array << "#{k}=#{v.to_s}"
       end
-      url += "?" if p.size > 0
-      url += p.join("&")
+      url += "?" if params_array.size > 0
+      url += params_array.join("&")
     end
 
     def connect_user provider, user=nil

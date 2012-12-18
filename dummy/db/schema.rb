@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121218124721) do
+ActiveRecord::Schema.define(:version => 20121218205329) do
 
   create_table "posts", :force => true do |t|
     t.string   "title"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20121218124721) do
     t.string   "provider"
     t.string   "uid"
     t.string   "email"
-    t.integer  "created",       :limit => 8
+    t.datetime "created",       :limit => 8
     t.string   "username"
     t.boolean  "verified"
     t.boolean  "admin"
