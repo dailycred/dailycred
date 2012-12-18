@@ -35,7 +35,7 @@ task :docs do
       end
     end
     doc = Maruku.new(md)
-    File.open("/Users/hank/rails/dailycred/app/views/tags/ruby.html", 'w') {|f| f.write doc.to_html}
+    File.open("/Users/hank/rails/dailycred/app/views/tags/docs/rubyonrails.html", 'w') {|f| f.write doc.to_html}
   rescue LoadError
     warn "#$! -- rocco tasks not loaded."
     task :rocco
