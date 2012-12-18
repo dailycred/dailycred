@@ -10,12 +10,9 @@ class CreateUsers < ActiveRecord::Migration
         t.boolean :admin
         t.string :referred_by
         t.string :token
-        t.text :facebook
+        t.string :access_token
         t.text :tags
         t.text :referred
-        t.text :google
-        t.text :twitter
-        t.text :github
         t.text :access_tokens
         t.boolean :subscribed
         t.string :display
@@ -28,16 +25,13 @@ class CreateUsers < ActiveRecord::Migration
       safe_column :users, :uid, :string
       safe_column :users, :email, :string
       safe_column :users, :username, :string
-      safe_column :users, :verified, :booleanied
+      safe_column :users, :verified, :boolean
       safe_column :users, :admin, :boolean
       safe_column :users, :referred, :string
       safe_column :users, :token, :string
-      safe_column :users, :facebook, :text
+      safe_column :users, :access_token, :string
       safe_column :users, :tags, :text
       safe_column :users, :referred, :text
-      safe_column :users, :google, :text
-      safe_column :users, :twitter, :text
-      safe_column :users, :github, :text
       safe_column :users, :access_tokens, :text
       safe_column :users, :display, :string
       safe_column :users, :subscribed, :boolean

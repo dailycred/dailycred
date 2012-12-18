@@ -17,6 +17,12 @@ describe OmniAuth::Strategies::Dailycred do
 
   it_should_behave_like 'an oauth2 strategy'
 
+  context "general" do
+    it "should be called dailycred" do
+      subject.options.name.should eq('dailycred')
+    end
+  end
+
 
   describe '#client' do
       it 'should have the correct dailycred site' do

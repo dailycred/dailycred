@@ -1,9 +1,5 @@
 module ActsAsDailycred
   def acts_as_dailycred
-    serialize :facebook, Hash
-    serialize :twitter, Hash
-    serialize :google, Hash
-    serialize :github, Hash
     serialize :tags, Array
     serialize :referred, Array
     serialize :access_tokens, Hash
@@ -42,16 +38,9 @@ module ActsAsDailycred
       end
     end
 
+    #deprecated, use @user.display
     def display_name
-      display = self.email || ""
-      if self.facebook != {}
-        return self.facebook["name"]
-      elsif self.google != {}
-        return self.google["name"]
-      elsif self.twitter != {}
-        return "@"+self.twitter["screen_name"]
-      end
-      display
+      self.display
     end
 
     def referral_link url

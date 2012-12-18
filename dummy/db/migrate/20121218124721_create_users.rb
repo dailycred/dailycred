@@ -5,20 +5,18 @@ class CreateUsers < ActiveRecord::Migration
         t.string :provider
         t.string :uid
         t.string :email
-        t.integer :created
         t.string :username
         t.boolean :verified
         t.boolean :admin
         t.string :referred_by
         t.string :token
-        t.text :facebook
+        t.string :access_token
         t.text :tags
         t.text :referred
-        t.text :google
-        t.text :twitter
-        t.text :github
+        t.text :access_tokens
         t.boolean :subscribed
         t.string :display
+        t.text :identities
 
         t.timestamps
       end
@@ -26,20 +24,18 @@ class CreateUsers < ActiveRecord::Migration
       safe_column :users, :provider, :string
       safe_column :users, :uid, :string
       safe_column :users, :email, :string
-      safe_column :users, :created, :integer
       safe_column :users, :username, :string
-      safe_column :users, :verified, :booleanied
+      safe_column :users, :verified, :boolean
       safe_column :users, :admin, :boolean
       safe_column :users, :referred, :string
       safe_column :users, :token, :string
-      safe_column :users, :facebook, :text
+      safe_column :users, :access_token, :string
       safe_column :users, :tags, :text
       safe_column :users, :referred, :text
-      safe_column :users, :google, :text
-      safe_column :users, :twitter, :text
-      safe_column :users, :github, :text
+      safe_column :users, :access_tokens, :text
       safe_column :users, :display, :string
       safe_column :users, :subscribed, :boolean
+      safe_column :users, :identities, :text
     end
   end
 

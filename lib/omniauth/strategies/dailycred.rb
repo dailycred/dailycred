@@ -69,6 +69,8 @@ module OmniAuth
           @duser[k][:access_token] = json["access_tokens"][k]
         end if !json["identities"].nil?
         pp @duser if options[:verbose]
+        created = json['created'] / 1000
+        @duser['created'] = DateTime.strptime(created.to_s, '%s')
         @duser.delete("id")
 
         @duser
