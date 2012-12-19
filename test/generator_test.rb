@@ -70,9 +70,6 @@ class GeneratorTest < Rails::Generators::TestCase
     end
 
     assert_migration "db/migrate/create_users.rb" do |migration|
-      assert migration.include? ":twitter"
-      assert migration.include? ":github"
-      assert migration.include? ":google"
     end
   end
 
