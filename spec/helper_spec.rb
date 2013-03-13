@@ -3,7 +3,7 @@
 require 'simplecov'
 SimpleCov.start
 require 'rspec'
-require 'rack/test'
+# require 'rack/test'
 require 'omniauth'
 require 'dailycred'
 
