@@ -25,7 +25,7 @@ module Dailycred
           @response = [body]
         end
       end
-
+      @env['rack.session']['omniauth.state'] ||= SecureRandom.hex(24)
       [@status, @headers, @response]
     end
 
@@ -34,13 +34,16 @@ module Dailycred
     def render_dailycred_scripts
       str =<<-EOT
       <!-- dailycred -->
+      #{'<script src="https://login.persona.org/include.js"></script>' if @opts[:persona_audience]}
       <script type="text/javascript">
       (function() {
         var dc, url;
         window.dc_opts = {
           clientId: "#{@client_id}",
-          home: "#{@opts[:url]}"
+          home: "#{@opts[:url]}", 
+          state: "#{@env['rack.session']['omniauth.state']}"
           #{", type: \"#{@status.to_s}\"" if @status == 500 || @status == 400}
+          #{", personaAudience: \"#{@opts[:persona_audience]}\"" if @opts[:persona_audience]}
         };
         dc = document.createElement("script");
         url = dc_opts.home + "/public/js/cred.coffee";

@@ -37,8 +37,8 @@ module Dailycred
         Rails.application.config.middleware.use OmniAuth::Builder do
           provider :dailycred, id, secret, opts
         end
-
-        Rails.application.config.middleware.use "Dailycred::Middleware", id
+        opts[:middleware] ||= {}
+        Rails.application.config.middleware.use "Dailycred::Middleware", id, opts[:middleware]
 
         ActiveSupport.on_load(:action_controller) do
           include Dailycred::Helpers

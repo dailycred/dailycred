@@ -181,6 +181,31 @@ Where opts is an optional hash for passing options. After initializing your clie
     @dailycred.untag(current_user.uid, "Failed Checkout") # user_id, key
 
 
+#### Persona Login
+
+1. Set your `persona audience` in your [dailycred identity provider settings](https://www.dailycred.com/admin/settings/identity-providers). This will be `http://{your-url}/auth/dailycred/callback`.
+2. Make sure you have configured your `callback url` in your [dailycred app settings](https://www.dailycred.com/admin/settings)
+3. In `config/omniauth.rb`, configure your middleware options to include your persona audience:
+
+    Rails.configuration.DAILYCRED_OPTIONS = {
+        middleware: {
+            persona_audience = "http://{your-url}/auth/dailycred/callback"
+        }
+    }
+
+4. In your javascript, call `personaLogin()`.
+
+    $(document).ready(function(){
+        $('.persona-login').click(function(){
+            personaLogin();
+        })
+    })
+
+5. Your user will be redirected to your [persona.org](https://persona.org) to login. If successful, your user will be redirected to your OAuth callback URL and be logged in.
+
+For more details, visit our [persona documentation](https://www.dailycred.com/docs/persona)
+
+
 #### Configuration
 
 To specify where users should be redirected after authentication actions, setup configure an `after_auth` property on a `Rails.configuration.DAILYCRED_OPTIONS` variable. Example:
