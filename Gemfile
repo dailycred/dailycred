@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rspec'
-gem 'rails'
+gem 'rails', '~> 3.2.12'
 gem 'simplecov'
 gem 'ruby_gntp'
 gem 'growl'
