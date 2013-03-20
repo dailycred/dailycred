@@ -1,8 +1,4 @@
-# Dailycred
-
-[![Build Status](https://secure.travis-ci.org/dailycred/dailycred.png?branch=master)](https://travis-ci.org/dailycred/dailycred)
-
-## Introduction
+# Ruby on Rails with Dailycred
 
 The Dailycred ruby gem is everything you need to get off the ground running with robust authentication. It includes an [omniauth](https://github.com/intridea/omniauth) provider and a generator to create necessary models and controllers. The generated authentication structure is inspired by [nifty-generators](https://github.com/ryanb/nifty-generators). To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your gemfile:
 
@@ -30,21 +26,21 @@ While this is enough to get off the ground running with user authentication, thi
 
 ## Authenticating
 
-#### login_path
+### login_path
 
 A helper for linking to the authentication url.
 
     <%= link_to 'sign up', login_path %>
     # => <a href="/auth/dailycred">sign up</a>
 
-#### logout_path
+### logout_path
 
 To logout a user, simply send them to `/auth/logout`.
 
     <%= link_to 'logout', logout_path %>
     # => <a href="/auth/logout">logout</a>
     
-#### authenticate
+### authenticate
 
 To protect a controller method from unauthorized users, use the 'authorize' helper method as a `before_filter`.
 
@@ -111,7 +107,7 @@ You can also connect additional social accounts to an existing user:
 
 There are a few other helper methods available:
 
-#### current_user
+### current_user
 
 Returns the current logged in user or nil. Example usage:
 
@@ -119,7 +115,7 @@ Returns the current logged in user or nil. Example usage:
       redirect_to :controller => 'welcome', :action => 'thanks'
     end
 
-#### dailycred
+### dailycred
 
 A helper for instantiating a dailycred client instance. Use as a `before_filter` to load a @dailycred instance variable, or just use it as a helper method. Example usage:
 
@@ -137,27 +133,27 @@ or just as a helper
         dailycred.event(current_user.uid, "New Task", @task.name)
     end
 
-#### Tagging a User
+### Tagging a User
 
 Dailycred provides the ability to 'tag' users, whether for reference in analytics or any other reason. Note that this is a very simple 'tagging' system, and not something you should use for dynamic tagging situations in your application.
 
     @user.tag 'awesome'
     @user.untag 'awesome'
 
-#### Firing Events
+### Firing Events
 
 You can also fire events tied to a specific user - this is helpful for goal tracking and tying actions to a specific user in analytics. We already fire many events for when a user signs up, resets a password, and much more, but you can also use the event system for something more specific for your application.
 
     # user#fire_event(key, value)
     @user.fire_event 'task added', @task.name
 
-#### Building Referral URLs
+### Building Referral URLs
 
 To easily build referral URLs to track sharing amongst your users, use `referral_link(my_site)`, where *my_site* is the url that you wish referred users to be sent to.
 
     current_user.referral_link("http://www.mysite.com")
 
-#### Testing Controllers
+### Testing Controllers
 
 Testing controllers that have the `authenticate` before filter is easy:
 
@@ -166,7 +162,7 @@ Testing controllers that have the `authenticate` before filter is easy:
 
 See `dummy/test/functional/post_controller_test.rb` for an example.
 
-#### Dailycred API
+### Dailycred API
 
 For reference, have a look at the [annotated source code.](https://www.dailycred.com/public/docs/ruby/lib/dailycred.html)
 
@@ -181,7 +177,7 @@ Where opts is an optional hash for passing options. After initializing your clie
     @dailycred.untag(current_user.uid, "Failed Checkout") # user_id, key
 
 
-#### Persona Login
+### Persona Login
 
 1. Set your `persona audience` in your [dailycred identity provider settings](https://www.dailycred.com/admin/settings/identity-providers). This will be `http://{your-url}/auth/dailycred/callback`.
 2. Make sure you have configured your `callback url` in your [dailycred app settings](https://www.dailycred.com/admin/settings)
@@ -206,7 +202,7 @@ Where opts is an optional hash for passing options. After initializing your clie
 For more details, visit our [persona documentation](https://www.dailycred.com/docs/persona)
 
 
-#### Configuration
+### Configuration
 
 To specify where users should be redirected after authentication actions, setup configure an `after_auth` property on a `Rails.configuration.DAILYCRED_OPTIONS` variable. Example:
 
@@ -227,3 +223,4 @@ To specify where users should be redirected after authentication actions, setup 
 
 ![](https://www.dailycred.com/dc.gif?client_id=dailycred&title=rails_repo "dailycred")
 
+[![Build Status](https://secure.travis-ci.org/dailycred/dailycred.png?branch=master)](https://travis-ci.org/dailycred/dailycred)
