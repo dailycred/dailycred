@@ -3,7 +3,7 @@ module ActsAsDailycred
     serialize :tags, Array
     serialize :referred, Array
     serialize :access_tokens, Hash
-    serialize :idenitities, Hash
+    serialize :identities, Hash
 
     extend ActsAsDailycred::SingletonMethods
     include ActsAsDailycred::InstanceMethods
@@ -52,7 +52,7 @@ module ActsAsDailycred
     def update_from_dailycred dc
       bad = ['updated_at', 'created_at']
       dc.each do |k,v|
-        self[k] = v if self.respond_to?(k) and !bad.include?(k.to_s)
+        self.send("#{k}=", v) if self.respond_to?(k) and !bad.include?(k.to_s)
       end
       save!
     end

@@ -1,7 +1,7 @@
 Dailycred::Engine.routes.draw do
-  match "/:provider/callback" => "sessions#create"
-  match "/logout" => "sessions#destroy", :as => :logout
-  match "/" => "sessions#info", :as => :auth_info
+  get "/:provider/callback" => "sessions#create"
+  get "/logout" => "sessions#destroy", :as => :logout
+  get "/" => "sessions#info", :as => :auth_info
   # get "/dailycred", :as => :login
-  match "/failure" => "sessions#failure"
+  get "/failure" => "sessions#failure"
 end
