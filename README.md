@@ -1,6 +1,12 @@
 ## Ruby on Rails
 
-The Dailycred ruby gem is everything you need to get off the ground running with robust authentication. It includes an [omniauth](https://github.com/intridea/omniauth) provider and a generator to create necessary models and controllers. The generated authentication structure is inspired by [nifty-generators](https://github.com/ryanb/nifty-generators). To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your gemfile:
+The Dailycred ruby gem is everything you need to get off the ground running with robust authentication. It includes an [omniauth](https://github.com/intridea/omniauth) provider and a generator to create necessary models and controllers. The generated authentication structure is inspired by [nifty-generators](https://github.com/ryanb/nifty-generators). 
+
+If you'd rather only communicate with Dailycred through OAuth and provide your own authentication controllers and models, you can use the [omniauth_dailycred](https://github.com/dailycred/omniauth_dailycred) gem.
+
+##Installation
+
+To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your gemfile:
 
     gem 'dailycred'
 

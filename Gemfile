@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gemspec
-gem 'omniauth_dailycred', path: '../omniauth_dailycred'
 gem 'rspec'
 gem 'rails', '~> 3.2.12'
 gem 'simplecov'
@@ -16,3 +15,4 @@ gem 'fl-rocco'
 gem 'redcarpet', '~> 1.17'
 gem 'markdown'
 gem 'maruku'
+gem 'faraday'

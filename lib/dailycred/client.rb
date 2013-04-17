@@ -1,5 +1,6 @@
 module Dailycred
   class Client
+    require 'faraday'
     attr_accessor :client_id, :secret_key, :options, :url
 
     URL = "https://www.dailycred.com"
