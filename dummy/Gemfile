@@ -1,55 +1,39 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.0.0.beta1'
 
 gem 'sqlite3'
-gem 'dailycred', :path => '../'
-gem 'awesome_print'
-
+gem 'dailycred', path: '../'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails',   '~> 4.0.0.beta1'
+  gem 'coffee-rails', '~> 4.0.0.beta1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
+  # gem 'therubyracer', platforms: :ruby
 
   gem 'uglifier', '>= 1.0.3'
 end
 
 gem 'jquery-rails'
-gem 'factory_girl'
 
-gem 'quiet_assets', :group => :development
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
 
-group :test, :development do
-  gem 'guard-test'
-  gem 'rb-fsevent', '~> 0.9.1'
-  gem 'guard'
-  gem 'growl'
-  gem 'guard-spork'
-  gem 'ruby_gntp'
-  gem 'spork-rails'
-  gem 'spork-testunit'
-  gem 'mocha'
-end
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 1.0.1'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
 
 # Use unicorn as the app server
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+# gem 'capistrano', group: :development
 
 # To use debugger
 # gem 'debugger'

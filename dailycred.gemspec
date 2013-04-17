@@ -7,8 +7,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{A Ruby on Rails engine for authentication with Dailycred.}
   gem.summary       = %q{}
   gem.homepage      = "https://www.dailycred.com"
-  gem.add_dependency("omniauth")
-  gem.add_dependency("omniauth-oauth2")
+  gem.add_dependency("omniauth_dailycred")
 
 
   gem.files         = `git ls-files`.split("\n")

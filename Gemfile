@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gemspec
-
+gem 'omniauth_dailycred', path: '../omniauth_dailycred'
 gem 'rspec'
 gem 'rails', '~> 3.2.12'
 gem 'simplecov'
