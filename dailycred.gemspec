@@ -8,6 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{}
   gem.homepage      = "https://www.dailycred.com"
   gem.add_dependency("omniauth_dailycred")
+  gem.add_dependency("faraday")
 
 
   gem.files         = `git ls-files`.split("\n")
