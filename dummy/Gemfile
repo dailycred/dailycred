@@ -6,6 +6,7 @@ gem 'rails', '4.0.0.beta1'
 gem 'sqlite3'
 gem 'omniauth_dailycred', path: '../../omniauth_dailycred'
 gem 'dailycred', path: '../'
+gem 'awesome_print'
 
 # Gems used only for assets and not required
 # in production environments by default.

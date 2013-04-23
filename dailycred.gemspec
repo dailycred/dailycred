@@ -6,9 +6,9 @@ Gem::Specification.new do |gem|
   gem.email         = ["hstove@gmail.com"]
   gem.description   = %q{A Ruby on Rails engine for authentication with Dailycred.}
   gem.summary       = %q{}
-  gem.homepage      = "https://www.dailycred.com"
-  gem.add_dependency("omniauth_dailycred")
-  gem.add_dependency("faraday")
+  gem.homepage      = "https://github.com/dailycred/dailycred"
+  gem.add_dependency("omniauth")
+  gem.add_dependency("omniauth-oauth2")
 
 
   gem.files         = `git ls-files`.split("\n")

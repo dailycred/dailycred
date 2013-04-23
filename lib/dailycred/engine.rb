@@ -1,4 +1,5 @@
 require 'rails'
+require 'omniauth'
 module Dailycred
 
   class Engine < Rails::Engine

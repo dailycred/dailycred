@@ -10,6 +10,11 @@ class DailycredGenerator < Rails::Generators::Base
 
   argument :client_id, :type => :string, :default => CLIENT_ID_DEFAULT, :banner => 'dailycred_client_id'
   argument :secret_key, :type => :string, :default => CLIENT_SECRET_DEFAULT, :banner => 'dailycred_secret_key'
+  class_option :bootstrap, :type => :boolean, :default => true, 
+    :description => "Indicates whether you want to generate the user model (with migration)
+    and mount the engine's sessions_controller.
+    Use --skip-bootstrap if you want are adding this to project that aleady has authentication."
+  
 
   APP_ROUTES_LINES =<<-EOS
   mount Dailycred::Engine => '/auth', :as => 'dailycred_engine'
@@ -35,14 +40,18 @@ class DailycredGenerator < Rails::Generators::Base
     template "omniauth.rb", "config/initializers/omniauth.rb"
     # get client info from login if they didnt specify info
     puts "Please manually configure your API keys in config/initializers/omniauth.rb"
-    # application controller
-    insert_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
-    # add user_model
-    copy_file "user.rb", "app/models/user.rb"
-    # session_controller
-    copy_file "migration_create_user.rb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_create_users.rb"
-    # config/routes
-    inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => ".draw do\n"
+    if options.bootstrap?
+      # application controller
+      insert_into_file "app/controllers/application_controller.rb", APP_CONTROLLER_LINES, :after => /class ApplicationController\n|class ApplicationController .*\n/
+      # user model
+      copy_file "user.rb", "app/models/user.rb"
+      # user migration
+      copy_file "migration_create_user.rb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_create_users.rb"
+      # confiffg/routes
+      inject_into_file "config/routes.rb", APP_ROUTES_LINES, :after => ".draw do\n"
+    else
+      puts "Make sure you implement your omniauth callback. For directions visit https://github.com/intridea/omniauth#integrating-omniauth-into-your-application"
+    end
   end
 
   private
