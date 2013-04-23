@@ -45,9 +45,9 @@ class GeneratorTest < Rails::Generators::TestCase
     assert_credentials "aaa", "bbb"
   end
 
-  test "generator works when skipping bootstrap" do
-    test_generator ["aaa", "bbb", "--skip-bootstrap"]
-  end
+  # test "generator works when skipping bootstrap" do
+  #   test_generator ["aaa", "bbb", "--skip-bootstrap"]
+  # end
 
   # test "generator works with login" do
   #   generator_class.any_instance.stubs(:get_input).returns(["localtest@dailycred.com","password"])
