@@ -36,6 +36,7 @@ class DailycredGenerator < Rails::Generators::Base
   EOS
 
   def install
+    puts "DEPRECATED: calling `rails generate dailycred` has been deprecated. Please use `rails generate dailycred:install`."
     # copy initializer
     template "omniauth.rb", "config/initializers/omniauth.rb"
     # get client info from login if they didnt specify info

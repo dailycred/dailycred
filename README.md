@@ -15,7 +15,7 @@ To get started using Dailycred with Ruby on Rails, the first thing you need to d
 Make sure you've signed up for Dailycred, and head over to your [settings](https://www.dailycred.com/admin/settings) page to get your API keys. Once you've done that, head back to the command line and run:
 
     bundle
-    rails g dailycred
+    rails g dailycred:install
     rake db:migrate
 
 Thats it! You've successfully added authentication to your app, and you can start signing up users. Run `rails s` to start your
@@ -220,15 +220,14 @@ To specify where users should be redirected after authentication actions, setup 
     #   :after_auth => '/hello', #after login
     #   :after_unauth => '/goodbye' #after logout
     # }
+    
+### Customization
 
-## Contributing
+If you would like to customize this engine's `session_controller` or views, two generators are provided for you.
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
-![](https://www.dailycred.com/dc.gif?client_id=dailycred&title=rails_repo "dailycred")
+	rails g dailycred:controllers
+	rails g dailycred:views
+	
+![](https://www.dailycred.com/dc.gif?client_id=dailycred&title=rails_repo&type=rails_repo "dailycred")
 
 [![Build Status](https://secure.travis-ci.org/dailycred/dailycred.png?branch=master)](https://travis-ci.org/dailycred/dailycred)

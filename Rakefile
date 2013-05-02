@@ -1,6 +1,7 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 require 'rspec/core/rake_task'
+require 'rake/testtask'
 
 desc "Run specs"
 RSpec::Core::RakeTask.new do |t|
@@ -10,11 +11,26 @@ end
 
 desc "run travis"
 task :travis do
-  ["rake spec","ruby test/test_helper.rb"].each do |cmd|
+  ["rake spec","rake test"].each do |cmd|
     puts "Starting to run #{cmd}..."
     system("export DISPLAY=:99.0 && bundle exec #{cmd}")
     raise "#{cmd} failed!" unless $?.exitstatus == 0
   end
+end
+
+# desc "generator tests"
+# task :test do
+#   system "bundle exec ruby test/test_helper.rb"
+#   raise "test::unit failed!" unless $?.exitstatus == 0
+# end
+
+desc 'Run Devise unit tests.'
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.pattern = 'test/**/*_test.rb'
+  # t.verbose = true
+  # t.warning = true
 end
 
 task :default => :travis
@@ -31,7 +47,7 @@ task :docs do
     md = ""
     File.open("README.md", "r") do |infile|
       while (line = infile.gets)
-        md += line
+        md += line.gsub(/(<code>HTML|javascript|ruby)/, "<code>")
       end
     end
     doc = Maruku.new(md)
