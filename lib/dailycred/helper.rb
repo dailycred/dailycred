@@ -46,7 +46,6 @@ module Dailycred
     end
 
     def redirect_to_auth opts={}
-      p 'redirecting to auth'
       conf = Rails.configuration.DAILYCRED_OPTIONS
       path = !conf[:after_auth].nil? ? conf[:after_auth] : dailycred_engine.auth_info_path
       redirect_to path, opts

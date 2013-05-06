@@ -1,5 +1,4 @@
 require 'rails/generators'
-require 'test_helper'
 module Dailycred
   module Generators
     class InstallGenerator < Rails::Generators::Base

@@ -1,7 +1,10 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 require 'rspec/core/rake_task'
+require 'rake'
 require 'rake/testtask'
+require 'rdoc/task'
+# require 'tasks/rails'
 
 desc "Run specs"
 RSpec::Core::RakeTask.new do |t|
@@ -11,7 +14,7 @@ end
 
 desc "run travis"
 task :travis do
-  ["rake spec","rake test"].each do |cmd|
+  ["rake spec","rake test", "cucumber"].each do |cmd|
     puts "Starting to run #{cmd}..."
     system("export DISPLAY=:99.0 && bundle exec #{cmd}")
     raise "#{cmd} failed!" unless $?.exitstatus == 0

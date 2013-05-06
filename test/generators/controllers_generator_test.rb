@@ -8,6 +8,7 @@ class ViewsGeneratorTest < Rails::Generators::TestCase
   test "creates correct controller files" do
     run_generator
     assert_file "app/controllers/dailycred/sessions_controller.rb"
+    assert_file "app/controllers/dailycred/users_controller.rb"
   end
 
 end
