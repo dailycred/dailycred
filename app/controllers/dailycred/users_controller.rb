@@ -15,6 +15,8 @@ module Dailycred
     def login
       response = dailycred.login params
       if response.success?
+        @user = User.find_or_create_from_local_auth(response.user)
+        session[:user_id] = @user.id
         flash[:notice] = "You have logged in successfully."
       else
         flash[:notice] = "There was a problem logging you in."
@@ -27,6 +29,8 @@ module Dailycred
     def signup
       response = dailycred.signup params
       if response.success?
+        @user = User.find_or_create_from_local_auth(response.user)
+        session[:user_id] = @user.id
         flash[:notice] = "You have signed up successfully."
       else
         flash[:notice] = "There was a problem logging you in."

@@ -5,6 +5,6 @@ Dailycred::Engine.routes.draw do
   # get "/dailycred", :as => :login
   get "/failure" => "dailycred/sessions#failure"
   get "/reset_password" => "dailycred/users#reset_password"
-  post "/auth" => "dailycred/users#signup", as: :local_signup
-  post "/auth/login" => "dailycred/users#login", as: :local_login
+  post "/" => "dailycred/users#signup", as: :local_signup
+  post "/login" => "dailycred/users#login", as: :local_login
 end

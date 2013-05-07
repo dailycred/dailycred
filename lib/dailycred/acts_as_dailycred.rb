@@ -15,6 +15,12 @@ module ActsAsDailycred
       @user.update_from_dailycred model[:info]
       @user
     end
+
+    def find_or_create_from_local_auth(user)
+      @user = User.find_or_create_by(provider: "dailycred", uid: user["id"])
+      @user.update_from_dailycred(user)
+      @user
+    end
   end
   module InstanceMethods
     def tag tag

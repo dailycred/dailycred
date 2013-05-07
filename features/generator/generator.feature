@@ -55,6 +55,10 @@ Feature: Creating an app with the dailycred generator
           post(:login, use_route: "auth", login:"test@test.com", password: "chocolate")
           flash[:notice].should match("logged in successfully")
           flash[:login_error].should be(nil)
+          assigns[:user].should_not be(nil)
+          assigns[:user].uid.should_not be(nil)
+          assigns[:user].email.should eq("test@test.com")
+          assigns[:user].access_tokens.should_not be(nil)
         end
 
         it "saves errors in the flash" do
@@ -71,6 +75,9 @@ Feature: Creating an app with the dailycred generator
           post(:signup, use_route: "auth", email:random_email, password: "password")
           flash[:notice].should match("signed up successfully")
           flash[:signup_error].should be(nil)
+          assigns[:user].should_not be(nil)
+          assigns[:user].uid.should_not be(nil)
+          assigns[:user].email.should eq(random_email)
         end
 
         it "saves errors in the flash" do

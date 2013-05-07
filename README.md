@@ -223,7 +223,7 @@ To specify where users should be redirected after authentication actions, setup 
     
 ### Customization
 
-If you would like to customize this engine's `session_controller` or views, two generators are provided for you.
+If you would like to customize this engine's controllers or views, two generators are provided for you.
 
 	rails g dailycred:controllers
 	rails g dailycred:views

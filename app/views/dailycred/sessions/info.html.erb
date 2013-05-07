@@ -12,4 +12,8 @@
   <br><%= link_to 'connect with google', connect_path(:identity_provider => :google) %>
   <br><%= link_to 'connect with twitter',connect_path(:identity_provider => :twitter) %>
   <br><br><%= render partial: "reset_password" %>
+  <br><h3>Sign Up</h3>
+  <%= render partial: "signup" %>
+  <br><h3>Log In</h3>
+  <%= render partial: "login" %>
 <% end %>

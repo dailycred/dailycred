@@ -1,0 +1,22 @@
+<% get_username = false if local_assigns[:get_username].nil? %>
+<%= form_tag dailycred_engine.local_signup_path do %>
+  <% if flash[:signup_error] %>
+    <div id="error_explanation">
+      <p>An error occured signing up:</p>
+      <h2><%= flash[:signup_error] %></h2>
+    </div>
+  <% end %>
+  <%= label_tag :email, "Email Address" %>
+  <%= text_field_tag :email %>
+  <br>
+  <% if get_username %>
+    <br>
+    <%= label_tag :username %>
+    <%= text_field_tag :username %>
+  <% end %>
+  <br>
+  <%= label_tag :password %>
+  <%= password_field_tag :password %>
+  <br>
+  <%= submit_tag "Sign Up" %>
+<% end %>
