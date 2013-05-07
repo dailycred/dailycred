@@ -36,31 +36,64 @@ describe Dailycred::Client do
   end
 
   it "tags a user" do
-    json = json_response @dc.tag(@user_id, "loser")
+    json = @dc.tag(@user_id, "loser").json
     json["worked"].should == true
     user = json["user"]
     user["tags"].should include('loser') #will work in next push
   end
 
   it "untags a user" do
-    json = json_response @dc.untag(@user_id, "loser")
+    json = @dc.untag(@user_id, "loser").json
     json["worked"].should == true
     user = json["user"]
     user["tags"].should == nil #will work in next push
   end
 
   it "fires an event" do
-    json = json_response @dc.event(@user_id, "became a loser")
+    json = @dc.event(@user_id, "became a loser").json
     json["worked"].should == true
   end
 
   it "resets a password" do
-    json = json_response @dc.reset_password("useruseruseruser@gmail.com")
+    json = @dc.reset_password("useruseruseruser@gmail.com").json
     json["worked"].should == true
   end
 
+  describe "#login" do
+    it "logs in successfully" do
+      response = @dc.login(login: "test@test.com", password: "password")
+      response.success?.should eq(true)
+      response.user["email"].should eq("test@test.com")
+      response.errors.should be(nil)
+    end
+
+    it "works with :pass parameter too" do
+      response = @dc.login(login: "test@test.com", pass: "password")
+      response.success?.should eq(true)
+      response.user["email"].should eq("test@test.com")
+      response.errors.should be(nil)
+    end
+
+    it "fails with wrong credentials" do
+      response = @dc.login(login: "test@test.com", password: "wrongpass")
+      response.success?.should eq(false)
+      response.errors["attribute"].should eq("form")
+      response.errors["message"].should_not be(nil)
+    end
+  end
+
+  describe "#signup" do
+    it "works with right parameters" do
+      random_email = "#{rand}test@test.com"
+      response = @dc.signup(email: random_email, password: "password")
+      response.success?.should eq(true)
+      response.user["email"].should eq(random_email)
+    end
+  end
+
+
   # it "changes a password" do
-  #   json = json_response @dc.changePass("0c19c355-2a71-4c8e-805e-f7a6087ea84c", "wrongPass", "newPass")
+  #   json = @dc.changePass("0c19c355-2a71-4c8e-805e-f7a6087ea84c", "wrongPass", "newPass").json
   #   json["worked"].should == false
   #   json["message"].should != nil
   # end

@@ -1,7 +1,7 @@
 Feature: Creating an app with the dailycred generator
 
   Scenario: creating an app
-    Given I run `rails new tmp_app -T`
+    Given I run `rails new tmp_app`
     And I cd to "tmp_app"
     And a file named "Gemfile" with:
     """
@@ -41,12 +41,42 @@ Feature: Creating an app with the dailycred generator
     describe Dailycred::UsersController do
       describe "GET #reset_password" do
         it "responds successfully with the right parameters" do
-          get(:reset_password, {:use_route => :auth, user: "test@test.com"})
+          get(:reset_password, :use_route => :auth, user: "test@test.com")
           flash[:notice].should match("Your password has been reset.")
         end
         it "fails without the :user parameter" do
           get(:reset_password, :use_route => :auth)
           flash[:notice].should match("Please enter your email or password")
+        end
+      end
+
+      describe "POST login" do
+        it "works with the right parameters" do
+          post(:login, use_route: "auth", login:"test@test.com", password: "chocolate")
+          flash[:notice].should match("logged in successfully")
+          flash[:login_error].should be(nil)
+        end
+
+        it "saves errors in the flash" do
+          post(:login, use_route: "auth", login:"test@test.com", password: "password")
+          flash[:notice].should match("problem")
+          flash[:login_error].should_not be(nil)
+          flash[:login_error_attribute].should_not be(nil)
+        end
+      end
+
+      describe "POST signup" do
+        it "works with the right parameters" do
+          random_email = "#{rand}email@test.com"
+          post(:signup, use_route: "auth", email:random_email, password: "password")
+          flash[:notice].should match("signed up successfully")
+          flash[:signup_error].should be(nil)
+        end
+
+        it "saves errors in the flash" do
+          post(:signup, use_route: "auth", password: "password")
+          flash[:signup_error].should_not be(nil)
+          flash[:signup_error_attribute].should_not be(nil)
         end
       end
     end

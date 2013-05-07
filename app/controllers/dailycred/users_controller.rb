@@ -11,5 +11,29 @@ module Dailycred
       end
       redirect_to_auth
     end
+
+    def login
+      response = dailycred.login params
+      if response.success?
+        flash[:notice] = "You have logged in successfully."
+      else
+        flash[:notice] = "There was a problem logging you in."
+        flash[:login_error] = response.errors["message"]
+        flash[:login_error_attribute] = response.errors["attribute"]
+      end
+      redirect_to_auth
+    end
+
+    def signup
+      response = dailycred.signup params
+      if response.success?
+        flash[:notice] = "You have signed up successfully."
+      else
+        flash[:notice] = "There was a problem logging you in."
+        flash[:signup_error] = response.errors["message"]
+        flash[:signup_error_attribute] = response.errors["attribute"]
+      end
+      redirect_to_auth
+    end
   end
 end

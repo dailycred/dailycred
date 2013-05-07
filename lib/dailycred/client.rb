@@ -69,6 +69,16 @@ module Dailycred
       post "/password/api/reset", opts
     end
 
+    def login opts={}
+      opts[:pass] ||= opts[:password]
+      post "/user/api/signin.json", opts
+    end
+
+    def signup opts={}
+      opts[:pass] ||= opts[:password]
+      post "/user/api/signup.json", opts
+    end
+
     # A wildcard for making any post requests to dailycred.
     # client_id and client_secret are automatically added to the request
     #
@@ -77,7 +87,7 @@ module Dailycred
     # - @param [boolean] secure whether the client_secret should be passed. Defaults to true
     def post(url, opts, secure=true)
       opts.merge! base_opts(secure)
-      response = get_conn.post url, opts
+      Dailycred::Response.new(get_conn.post url, opts)
     end
 
     private
