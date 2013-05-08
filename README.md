@@ -215,11 +215,11 @@ For more details, visit our [persona documentation](https://www.dailycred.com/do
 To specify where users should be redirected after authentication actions, setup configure an `after_auth` property on a `Rails.configuration.DAILYCRED_OPTIONS` variable. Example:
 
     # configure where users should be redirected after authentication
-    #
-    # Rails.configuration.DAILYCRED_OPTIONS = {
-    #   :after_auth => '/hello', #after login
-    #   :after_unauth => '/goodbye' #after logout
-    # }
+    
+    Rails.configuration.DAILYCRED_OPTIONS = {
+      :after_auth => '/hello', #after login
+      :after_unauth => '/goodbye' #after logout
+    }
     
 ### Customization
 

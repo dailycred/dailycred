@@ -45,16 +45,12 @@ task :docs do
     require 'rocco/tasks'
     require 'fileutils'
     require 'maruku'
+    require 'github/markup'
     Rocco::make 'docs/'
     FileUtils.cp_r "docs/lib/", "/Users/hank/java/dailycred/public/docs/ruby/", :verbose => true
-    md = ""
-    File.open("README.md", "r") do |infile|
-      while (line = infile.gets)
-        md += line.gsub(/(<code>HTML|javascript|ruby)/, "<code>")
-      end
-    end
-    doc = Maruku.new(md)
-    File.open("/Users/hank/java/dailycred/app/views/tags/docs/rubyonrails.html", 'w') {|f| f.write doc.to_html}
+    html = GitHub::Markup.render("README.md", File.read("README.md"))
+    File.open("/Users/hank/java/dailycred/app/views/tags/docs/rubyonrails.html", 'w') {|f| f.write html}
+    p "copied readme to dailycred"
   rescue LoadError
     warn "#$! -- rocco tasks not loaded."
     task :rocco
