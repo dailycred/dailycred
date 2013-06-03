@@ -45,7 +45,7 @@ A helper for linking to the authentication url.
 
 To logout a user, simply send them to `/auth/logout`.
 
-    <%= link_to 'logout', logout_path %>
+    <%= link_to 'logout', dailycred_engine.logout_path %>
     # => <a href="/auth/logout">logout</a>
     
 ### authenticate
