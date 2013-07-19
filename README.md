@@ -8,11 +8,16 @@ If you'd rather only communicate with Dailycred through OAuth and provide your o
 
 ##Installation
 
-To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your gemfile:
+To get started using Dailycred with Ruby on Rails, the first thing you need to do is add the dailycred gem to your application's gemfile:
 
     gem 'dailycred'
 
-Make sure you've signed up for Dailycred, and head over to your [settings](https://www.dailycred.com/admin/settings) page to get your API keys. Once you've done that, head back to the command line and run:
+Make sure you've signed up for Dailycred, and head over to your [settings](https://www.dailycred.com/admin/settings) page to get your API keys.  Replace the keys in the file config/initializers/omniauth.rb with your account's keys:
+
+    Rails.configuration.DAILYCRED_CLIENT_ID = "YOUR_CLIENT_ID"
+    Rails.configuration.DAILYCRED_SECRET_KEY = "YOUR_SECRET_KEY"
+
+Once you've done that, head back to the command line and run:
 
     bundle
     rails g dailycred:install
