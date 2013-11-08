@@ -177,8 +177,6 @@ See `dummy/test/functional/post_controller_test.rb` for an example.
 
 ### Dailycred API
 
-For reference, have a look at the [annotated source code.](https://www.dailycred.com/public/docs/ruby/lib/dailycred.html)
-
 For all API calls, you must first initalize a Dailycred client:
 
     @dailycred = Dailycred.new "YOUR_CLIENT_ID", "your_secret_key", opts
